@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+    <div class="container mt-3">
+        <div class="card card-blue">
+            <div class="card-body">
+                <h5 class="card-title">Übersicht aller Einträge</h5>
+
+                {% if entries is empty %}
+                    <p>Noch keine Einträge vorhanden</p>
+                {% else %}
+                    <table class="table text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Datum</th>
+                            <th scope="col">Schicht</th>
+                            <th scope="col">Verkäufer</th>
+                            <th scope="col">Produkt</th>
+                            <th scope="col">Menge</th>
+                            <th scope="col">Preis/Stück</th>
+                            <th scope="col">Gesamtkosten</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for entry in entries %}
+                            <tr>
+                                <th scope="row">{{ entry.id }}</th>
+                                <td>{{ entry.created|date("d.m.Y") }}</td>
+                                <td>{{ entry.shift.time }}</td>
+                                <td>{{ entry.seller.name }}</td>
+                                <td>{{ entry.product.name }}</td>
+                                <td>{{ entry.amount }}</td>
+                                <td>{{ entry.price|number_format(2, ',', '.') }}</td>
+                                <td>{{ (entry.amount * entry.price)|number_format(2, ',', '.') }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

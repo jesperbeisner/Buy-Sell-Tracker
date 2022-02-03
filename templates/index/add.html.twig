@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello IndexController!{% endblock %}
+
+{% block body %}
+    <div class="container mt-3">
+        <div class="card card-blue">
+            <div class="card-body">
+                <h5 class="card-title">Einträge hinzufügen</h5>
+
+                {{ form_start(form) }}
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        {{ form_row(form.amount) }}
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        {{ form_row(form.price) }}
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        {{ form_row(form.shift) }}
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        {{ form_row(form.product) }}
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        {{ form_row(form.seller) }}
+                    </div>
+                </div>
+
+                <div class="row mt-4">
+                    <div class="col-md-12">
+                        {{ form_row(form.save) }}
+                    </div>
+                </div>
+                {{ form_rest(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}
