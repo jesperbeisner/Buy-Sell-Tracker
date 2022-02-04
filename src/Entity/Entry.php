@@ -7,6 +7,7 @@ use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EntryRepository::class)]
+#[ORM\Index(fields: ['created'], name: 'created_index')]
 class Entry
 {
     #[ORM\Id]
@@ -24,12 +25,15 @@ class Entry
     private DateTime $created;
 
     #[ORM\ManyToOne(targetEntity: Shift::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private Shift $shift;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private Product $product;
 
     #[ORM\ManyToOne(targetEntity: Seller::class)]
+    #[ORM\JoinColumn(nullable: false)]
     private Seller $seller;
 
     public function __construct()

@@ -16,6 +16,9 @@ class Product
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $deleted = false;
+
     public function getId(): int
     {
         return $this->id;
@@ -34,5 +37,20 @@ class Product
     public function setName(string $name): void
     {
         $this->name = $name;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): void
+    {
+        $this->deleted = $deleted;
+    }
+
+    public function delete(): void
+    {
+        $this->deleted = true;
     }
 }

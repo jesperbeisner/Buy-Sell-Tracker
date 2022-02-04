@@ -16,6 +16,9 @@ class Shift
     #[ORM\Column(type: 'string', length: 255)]
     private string $time;
 
+    #[ORM\Column(type: 'boolean')]
+    private bool $deleted = false;
+
     public function getId(): int
     {
         return $this->id;
@@ -34,5 +37,20 @@ class Shift
     public function setTime(string $time): void
     {
         $this->time = $time;
+    }
+
+    public function isDeleted(): bool
+    {
+        return $this->deleted;
+    }
+
+    public function setDeleted(bool $deleted): void
+    {
+        $this->deleted = $deleted;
+    }
+
+    public function delete(): void
+    {
+        $this->deleted = true;
     }
 }

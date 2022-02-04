@@ -1,15 +1,14 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello IndexController!{% endblock %}
-
 {% block body %}
-    <div class="container mt-3">
+    <div class="container mt-3 mb-3">
         <div class="card card-blue">
             <div class="card-body">
                 <h5 class="card-title">Übersicht aller Einträge</h5>
-
                 {% if entries is empty %}
-                    <p>Noch keine Einträge vorhanden</p>
+                    <p class="text-center">
+                        Noch keine Einträge vorhanden
+                    </p>
                 {% else %}
                     <table class="table text-center">
                         <thead>
@@ -28,7 +27,9 @@
                         {% for entry in entries %}
                             <tr>
                                 <th scope="row">{{ entry.id }}</th>
-                                <td>{{ entry.created|date("d.m.Y") }}</td>
+                                <td title="{{ entry.created|date("d.m.Y H:i:s") }}">
+                                    {{ entry.created|date("d.m.Y") }}
+                                </td>
                                 <td>{{ entry.shift.time }}</td>
                                 <td>{{ entry.seller.name }}</td>
                                 <td>{{ entry.product.name }}</td>

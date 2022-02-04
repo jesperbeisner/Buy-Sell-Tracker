@@ -4,10 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Entry;
 use App\Form\EntryType;
+use App\Service\DateService;
+use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class IndexController extends AbstractController
@@ -38,5 +41,21 @@ class IndexController extends AbstractController
         return $this->render('index/add.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    #[Route('/evaluation/{week}', name: 'evaluation', requirements: ['week' => '\d{1,2}'], defaults: ['week' => 0])]
+    public function evaluation(int $week, DateService $dateService): Response
+    {
+        if ($week > 52) {
+            throw new NotFoundHttpException();
+        }
+
+        if ($week === 0) {
+            $week = (int)(new DateTime())->format('W');
+        }
+
+        [$startDate, $endDate] = $dateService->getStartAndEndOfWeekFromWeekNumber($week);
+
+        return $this->render('index/evaluation.html.twig');
     }
 }
