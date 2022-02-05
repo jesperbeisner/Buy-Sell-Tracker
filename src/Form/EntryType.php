@@ -46,7 +46,8 @@ class EntryType extends AbstractType
                 'query_builder' => function (ProductRepository $repository) {
                     return $repository->createQueryBuilder('p')
                         ->where('p.deleted = :bool')
-                        ->setParameter('bool', false);
+                        ->setParameter('bool', false)
+                        ->orderBy('p.name', 'ASC');
                 },
                 'choice_label' => 'name',
                 'attr' => ['class' => 'form-control']
@@ -57,7 +58,8 @@ class EntryType extends AbstractType
                 'query_builder' => function (SellerRepository $repository) {
                     return $repository->createQueryBuilder('s')
                         ->where('s.deleted = :bool')
-                        ->setParameter('bool', false);
+                        ->setParameter('bool', false)
+                        ->orderBy('s.name', 'ASC');
                 },
                 'choice_label' => 'name',
                 'attr' => ['class' => 'form-control']
