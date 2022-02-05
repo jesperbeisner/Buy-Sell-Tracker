@@ -1,6 +1,13 @@
-const AlertContainer = document.getElementById('alert-container');
-if (AlertContainer !== null) {
+const SuccessAlertContainer = document.getElementById('success-alert-container');
+if (SuccessAlertContainer !== null) {
     setTimeout(() => {
-        AlertContainer.classList.add('d-none')
+        SuccessAlertContainer.classList.add('d-none')
+    }, 3500);
+}
+
+const ErrorAlertContainer = document.getElementById('error-alert-container');
+if (ErrorAlertContainer !== null) {
+    setTimeout(() => {
+        ErrorAlertContainer.classList.add('d-none')
     }, 3500);
 }

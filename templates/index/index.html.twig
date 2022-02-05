@@ -21,12 +21,14 @@
                             <th scope="col">Menge</th>
                             <th scope="col">Preis/Stück</th>
                             <th scope="col">Gesamtkosten</th>
+                            <th scope="col">Löschen</th>
                         </tr>
                         </thead>
                         <tbody>
+                        {% set i = 1 %}
                         {% for entry in entries %}
                             <tr>
-                                <th scope="row">{{ entry.id }}</th>
+                                <th scope="row">{{ i }}</th>
                                 <td title="{{ entry.created|date("d.m.Y H:i:s") }}">
                                     {{ entry.created|date("d.m.Y") }}
                                 </td>
@@ -36,7 +38,19 @@
                                 <td>{{ entry.amount }}</td>
                                 <td>{{ entry.price|number_format(2, ',', '.') }}</td>
                                 <td>{{ (entry.amount * entry.price)|number_format(2, ',', '.') }}</td>
+                                <td>
+                                    <form method="POST" id="form-{{ entry.id }}">
+                                        <input type="hidden" name="entry-id" value="{{ entry.id }}">
+                                        <i class="delete-icon" data-entry-id="{{ entry.id }}" style="cursor: pointer;">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                            </svg>
+                                        </i>
+                                    </form>
+                                </td>
                             </tr>
+                            {% set i = i + 1 %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -44,4 +58,6 @@
             </div>
         </div>
     </div>
+
+    <script src="{{ asset('js/delete-entries.js') }}"></script>
 {% endblock %}

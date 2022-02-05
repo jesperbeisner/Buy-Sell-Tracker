@@ -18,8 +18,23 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
+        if ($request->isMethod('POST')) {
+            $entryId = (int) $request->request->get('entry-id');
+
+            if (null === $entry = $entityManager->getRepository(Entry::class)->find($entryId)) {
+                $this->addFlash('error', 'Der Eintrag wurde nicht gefunden und konnte deswegen nicht gelöscht werden');
+                return $this->redirectToRoute('index');
+            }
+
+            $entityManager->remove($entry);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Der Eintrag wurde erfolgreich gelöscht');
+            return $this->redirectToRoute('index');
+        }
+
         return $this->render('index/index.html.twig', [
             'entries' => $entityManager->getRepository(Entry::class)->findAll(),
         ]);
