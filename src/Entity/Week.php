@@ -19,17 +19,17 @@ class Week
     private int $week;
 
     #[ORM\Column(type: 'integer')]
-    private int $year;
+    private int $year = 2022;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
     #[ORM\JoinColumn(nullable: false)]
     private Product $product;
 
     #[ORM\Column(type: 'float')]
-    private float $blackMoney;
+    private float $blackMoney = 0;
 
     #[ORM\Column(type: 'float')]
-    private float $realMoney;
+    private float $realMoney = 0;
 
     #[ORM\Column(type: 'datetime')]
     private DateTime $created;

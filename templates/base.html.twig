@@ -39,7 +39,7 @@
 
         {% set messages = app.flashes('success') %}
         {% if messages is not empty %}
-            <div class="container mt-3 text-center">
+            <div class="container mt-3 text-center" id="alert-container">
                 <div class="row">
                     <div class="col">
                         {% for message in messages %}
@@ -53,5 +53,9 @@
         {% endif %}
 
         {% block body %}{% endblock %}
+
+        {% block javascriptbottom %}
+            <script src="{{ asset('js/alert.js') }}"></script>
+        {% endblock %}
     </body>
 </html>

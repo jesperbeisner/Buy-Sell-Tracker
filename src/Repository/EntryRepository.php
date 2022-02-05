@@ -23,7 +23,7 @@ class EntryRepository extends ServiceEntityRepository
     public function findEntriesByWeek(DateTime $startDate, DateTime $endDate): array
     {
         return $this->createQueryBuilder('e')
-            ->select('p.name, sum(e.amount) as amount, sum(e.amount * e.price) as price')
+            ->select('p.id, p.name, sum(e.amount) as amount, sum(e.amount * e.price) as price')
             ->innerJoin('e.product', 'p')
             ->andWhere('e.created > :startDate')
             ->andWhere('e.created < :endDate')
