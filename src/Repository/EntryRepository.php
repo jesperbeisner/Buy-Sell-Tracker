@@ -31,7 +31,7 @@ class EntryRepository extends ServiceEntityRepository
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
             ->setParameter('status', false)
-            ->groupBy('p.name')
+            ->groupBy('p.id')
             ->getQuery()
             ->getResult()
         ;

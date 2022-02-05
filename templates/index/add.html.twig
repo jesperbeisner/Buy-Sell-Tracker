@@ -2,48 +2,119 @@
 
 {% block body %}
     <div class="container mt-3 mb-3">
-        <div class="card card-blue">
-            <div class="card-body">
-                <h5 class="card-title">Einträge hinzufügen</h5>
+        <div class="row">
+            <div class="col">
+                <h1 class="page-title">Eintrag hinzufügen</h1>
+            </div>
+        </div>
 
-                {{ form_start(form) }}
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        {{ form_row(form.amount) }}
+        <div class="row mt-2">
+            <div class="col">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="buy-tab" data-bs-toggle="tab" data-bs-target="#buy" type="button" role="tab" aria-controls="buy" aria-selected="true">
+                                    Kauf
+                                </button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="sell-tab" data-bs-toggle="tab" data-bs-target="#sell" type="button" role="tab" aria-controls="sell" aria-selected="false">
+                                    Verkauf
+                                </button>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="buy" role="tabpanel" aria-labelledby="buy-tab">
+                                {{ form_start(form) }}
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.name) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.amount) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.price) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.shift) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.product) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.seller) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(form.save) }}
+                                    </div>
+                                </div>
+                                {{ form_rest(form) }}
+                                {{ form_end(form) }}
+                            </div>
+
+                            <div class="tab-pane fade" id="sell" role="tabpanel" aria-labelledby="sell-tab">
+                                {{ form_start(sellForm) }}
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(sellForm.name) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(sellForm.amount) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(sellForm.blackMoney) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(sellForm.realMoney) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(sellForm.product) }}
+                                    </div>
+                                </div>
+
+                                <div class="row mt-4">
+                                    <div class="col-md-12">
+                                        {{ form_row(sellForm.save) }}
+                                    </div>
+                                </div>
+                                {{ form_rest(sellForm) }}
+                                {{ form_end(sellForm) }}
+                            </div>
+                        </div>
                     </div>
                 </div>
-
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        {{ form_row(form.price) }}
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        {{ form_row(form.shift) }}
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        {{ form_row(form.product) }}
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        {{ form_row(form.seller) }}
-                    </div>
-                </div>
-
-                <div class="row mt-4">
-                    <div class="col-md-12">
-                        {{ form_row(form.save) }}
-                    </div>
-                </div>
-                {{ form_rest(form) }}
-                {{ form_end(form) }}
             </div>
         </div>
     </div>

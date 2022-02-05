@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-3 mb-3">
+        <div class="row">
+            <div class="col">
+                <h1 class="page-title">Einstellungen</h1>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <h4 class="card-title">
+                            Verkäufer hinzufügen
+                        </h4>
+                        <form method="POST" class="mt-3">
+                            <div class="mb-2">
+                                <label for="seller" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="seller" name="seller">
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="button" value="seller">
+                                Speichern
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

@@ -36,6 +36,9 @@ class Entry
     #[ORM\JoinColumn(nullable: false)]
     private Seller $seller;
 
+    #[ORM\Column(type: 'string', nullable: true)]
+    private ?string $name;
+
     public function __construct()
     {
         $this->created = new DateTime();
@@ -109,5 +112,15 @@ class Entry
     public function setSeller(Seller $seller): void
     {
         $this->seller = $seller;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
     }
 }

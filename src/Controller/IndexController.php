@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\Entry;
 use App\Entity\Product;
+use App\Entity\Sale;
 use App\Entity\Week;
 use App\Form\EntryType;
+use App\Form\SaleType;
 use App\Service\DateService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -21,33 +23,47 @@ class IndexController extends AbstractController
     public function index(Request $request, EntityManagerInterface $entityManager): Response
     {
         if ($request->isMethod('POST')) {
-            $entryId = (int) $request->request->get('entry-id');
+            $actionName = $request->request->get('action');
 
-            if (null === $entry = $entityManager->getRepository(Entry::class)->find($entryId)) {
-                $this->addFlash('error', 'Der Eintrag wurde nicht gefunden und konnte deswegen nicht gelöscht werden');
-                return $this->redirectToRoute('index');
+            if ($actionName === 'buy') {
+                $entryId = (int)$request->request->get('entry-id');
+                $entry = $entityManager->getRepository(Entry::class)->find($entryId);
+
+                if ($entry !== null) {
+                    $entityManager->remove($entry);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Der Eintrag wurde erfolgreich gelöscht');
+                }
             }
 
-            $entityManager->remove($entry);
-            $entityManager->flush();
+            if ($actionName === 'sell') {
+                $saleId = (int)$request->request->get('sale-id');
+                $sale = $entityManager->getRepository(Sale::class)->find($saleId);
 
-            $this->addFlash('success', 'Der Eintrag wurde erfolgreich gelöscht');
+                if ($sale !== null) {
+                    $entityManager->remove($sale);
+                    $entityManager->flush();
+                    $this->addFlash('success', 'Der Eintrag wurde erfolgreich gelöscht');
+                }
+            }
+
             return $this->redirectToRoute('index');
         }
 
         return $this->render('index/index.html.twig', [
-            'entries' => $entityManager->getRepository(Entry::class)->findAll(),
+            'entries' => $entityManager->getRepository(Entry::class)->findBy([], ['created' => 'DESC']),
+            'sales' => $entityManager->getRepository(Sale::class)->findBy([], ['created' => 'DESC']),
         ]);
     }
 
     #[Route('/add', name: 'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
-        $form = $this->createForm(EntryType::class);
-        $form->handleRequest($request);
+        $buyForm = $this->createForm(EntryType::class);
+        $buyForm->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entry = $form->getViewData();
+        if ($buyForm->isSubmitted() && $buyForm->isValid()) {
+            $entry = $buyForm->getViewData();
             $entityManager->persist($entry);
             $entityManager->flush();
 
@@ -55,8 +71,21 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('add');
         }
 
+        $sellForm = $this->createForm(SaleType::class);
+        $sellForm->handleRequest($request);
+
+        if ($sellForm->isSubmitted() && $sellForm->isValid()) {
+            $sale = $sellForm->getViewData();
+            $entityManager->persist($sale);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Der Eintrag wurde erfolgreich hinzugefügt');
+            return $this->redirectToRoute('add');
+        }
+
         return $this->render('index/add.html.twig', [
-            'form' => $form->createView(),
+            'form' => $buyForm->createView(),
+            'sellForm' => $sellForm->createView(),
         ]);
     }
 
@@ -67,11 +96,12 @@ class IndexController extends AbstractController
         defaults: ['week' => 0]
     )]
     public function evaluation(
-        int $week,
-        Request $request,
-        DateService $dateService,
+        int                    $week,
+        Request                $request,
+        DateService            $dateService,
         EntityManagerInterface $entityManager
-    ): Response {
+    ): Response
+    {
         if ($week > 52) {
             throw new NotFoundHttpException();
         }
@@ -81,47 +111,23 @@ class IndexController extends AbstractController
             return $this->redirectToRoute('evaluation', ['week' => $week]);
         }
 
-        if ($request->isMethod('POST')) {
-            $productId = (int) $request->request->get('product-id');
-            $blackMoney = (float) $request->request->get('black-money');
-            $realMoney = (float) $request->request->get('real-money');
-
-            if (null === $product = $entityManager->getRepository(Product::class)->find($productId)) {
-                return $this->redirectToRoute('evaluation', ['week' => $week]);
-            }
-
-            /** @var Week $weekEntity */
-            $weekEntity = $entityManager->getRepository(Week::class)->findOneBy(['week' => $week, 'year' => 2022, 'product' => $product]);
-            if ($weekEntity === null) {
-                $weekEntity = new Week();
-                $weekEntity->setProduct($product);
-            }
-
-            $weekEntity->setWeek($week);
-            $weekEntity->setBlackMoney($blackMoney);
-            $weekEntity->setRealMoney($realMoney);
-
-            $entityManager->persist($weekEntity);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Der Eintrag wurde erfolgreich hinzugefügt');
-            return $this->redirectToRoute('evaluation', ['week' => $week]);
-        }
-
         [$startDate, $endDate] = $dateService->getStartAndEndOfWeekFromWeekNumber($week);
 
-        $products = $entityManager->getRepository(Product::class)->findBy(['deleted' => false]);
+        $products = $entityManager->getRepository(Product::class)->findBy(['deleted' => false], ['name' => 'ASC']);
         $entries = $entityManager->getRepository(Entry::class)->findEntriesByWeek($startDate, $endDate);
-        $weekEntries = $entityManager->getRepository(Week::class)->findBy(['week' => $week, 'year' => 2022]);
+        $sales = $entityManager->getRepository(Sale::class)->findSalesByWeek($startDate, $endDate);
 
-        $weekEntriesArray = [];
-        foreach ($weekEntries as $weekEntry) {
-            $weekEntriesArray[$weekEntry->getProduct()->getId()] = [
-                'blackMoney' => $weekEntry->getBlackMoney(),
-                'realMoney' => $weekEntry->getRealMoney(),
-            ];
-        }
+        return $this->render('index/evaluation.html.twig', [
+            'buyResults' => $this->createBuyResultsArray($products, $entries),
+            'sellResults' => $this->createSellResultsArray($products, $sales),
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'week' => $week,
+        ]);
+    }
 
+    private function createBuyResultsArray(array $products, array $entries): array
+    {
         $results = [];
         foreach ($products as $product) {
             $results[$product->getId()] = [
@@ -140,12 +146,31 @@ class IndexController extends AbstractController
             }
         }
 
-        return $this->render('index/evaluation.html.twig', [
-            'results' => $results,
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'week' => $week,
-            'weekEntries' => $weekEntriesArray
-        ]);
+        return $results;
+    }
+
+    private function createSellResultsArray(array $products, array $sales): array
+    {
+        $results = [];
+        foreach ($products as $product) {
+            $results[$product->getId()] = [
+                'id' => $product->getId(),
+                'name' => $product->getName(),
+                'amount' => 0,
+                'blackMoney' => 0,
+                'realMoney' => 0
+            ];
+        }
+
+        foreach ($sales as $sale) {
+            if (array_key_exists($sale['id'], $results)) {
+                $results[$sale['id']]['id'] = $sale['id'];
+                $results[$sale['id']]['amount'] = $sale['amount'];
+                $results[$sale['id']]['blackMoney'] = $sale['blackMoney'];
+                $results[$sale['id']]['realMoney'] = $sale['realMoney'];
+            }
+        }
+
+        return $results;
     }
 }
