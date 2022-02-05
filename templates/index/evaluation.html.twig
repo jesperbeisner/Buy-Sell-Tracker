@@ -2,10 +2,51 @@
 
 {% block body %}
     <div class="container mt-3 mb-3">
-        <div class="card card-blue">
-            <div class="card-body">
-                <h5 class="card-title">Auswertung</h5>
+        <div class="row">
+            <div class="col">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Auswertung von Woche {{ week }} - {{ startDate|date("d.m.Y") }}
+                            bis {{ endDate|date("d.m.Y") }}
+                        </h5>
 
+                        <table class="table table-hover mt-4 text-center">
+                            <thead>
+                            <tr>
+                                <th scope="col">Produkt</th>
+                                <th scope="col">Anzahl</th>
+                                <th scope="col">Kosten</th>
+                                <th scope="col">Schwarzgeld</th>
+                                <th scope="col">Echtes Geld</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for result in results %}
+                                <tr>
+                                    <td>{{ result.name }}</td>
+                                    <td>{{ result.amount|number_format(0, ',', '.') }}</td>
+                                    <td>${{ result.price|number_format(2, ',', '.') }}</td>
+                                    <td>0</td>
+                                    <td>0</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col">
+                {% if week > 1 %}
+                    <a class="btn btn-primary" href="{{ path('evaluation', {week: week - 1}) }}"><< Vorherige Woche</a>
+                {% endif %}
+
+                {% if week < 52 %}
+                    <a class="btn btn-primary" href="{{ path('evaluation', {week: week + 1}) }}">Nächste Woche >></a>
+                {% endif %}
             </div>
         </div>
     </div>

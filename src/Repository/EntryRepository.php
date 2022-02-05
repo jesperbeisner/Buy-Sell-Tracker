@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Entry;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,20 @@ class EntryRepository extends ServiceEntityRepository
         parent::__construct($registry, Entry::class);
     }
 
-    // /**
-    //  * @return Entry[] Returns an array of Entry objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findEntriesByWeek(DateTime $startDate, DateTime $endDate): array
     {
         return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
+            ->select('p.name, sum(e.amount) as amount, sum(e.amount * e.price) as price')
+            ->innerJoin('e.product', 'p')
+            ->andWhere('e.created > :startDate')
+            ->andWhere('e.created < :endDate')
+            ->andWhere('p.deleted = :status')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->setParameter('status', false)
+            ->groupBy('p.name')
             ->getQuery()
             ->getResult()
         ;
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Entry
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

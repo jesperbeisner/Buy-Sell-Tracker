@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Entry;
+use App\Entity\Product;
 use App\Form\EntryType;
 use App\Service\DateService;
 use DateTime;
@@ -44,7 +45,7 @@ class IndexController extends AbstractController
     }
 
     #[Route('/evaluation/{week}', name: 'evaluation', requirements: ['week' => '\d{1,2}'], defaults: ['week' => 0])]
-    public function evaluation(int $week, DateService $dateService): Response
+    public function evaluation(int $week, DateService $dateService, EntityManagerInterface $entityManager): Response
     {
         if ($week > 52) {
             throw new NotFoundHttpException();
@@ -52,10 +53,31 @@ class IndexController extends AbstractController
 
         if ($week === 0) {
             $week = (int)(new DateTime())->format('W');
+            return $this->redirectToRoute('evaluation', ['week' => $week]);
         }
 
         [$startDate, $endDate] = $dateService->getStartAndEndOfWeekFromWeekNumber($week);
 
-        return $this->render('index/evaluation.html.twig');
+        $products = $entityManager->getRepository(Product::class)->findBy(['deleted' => false]);
+        $entries = $entityManager->getRepository(Entry::class)->findEntriesByWeek($startDate, $endDate);
+
+        $results = [];
+        foreach ($products as $product) {
+            $results[$product->getName()] = ['name' => $product->getName(), 'amount' => 0, 'price' => 0];
+        }
+
+        foreach ($entries as $entry) {
+            if (array_key_exists($entry['name'], $results)) {
+                $results[$entry['name']]['amount'] = $entry['amount'];
+                $results[$entry['name']]['price'] = $entry['price'];
+            }
+        }
+
+        return $this->render('index/evaluation.html.twig', [
+            'results' => $results,
+            'startDate' => $startDate,
+            'endDate' => $endDate,
+            'week' => $week,
+        ]);
     }
 }
