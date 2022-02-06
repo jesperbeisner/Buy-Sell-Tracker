@@ -62,9 +62,9 @@
                                                     <td>{{ entry.name ?? '-' }}</td>
                                                     <td>{{ entry.product.name }}</td>
                                                     <td>{{ entry.amount }}</td>
-                                                    <td>${{ entry.price|number_format(2, ',', '.') }}</td>
+                                                    <td>${{ entry.price|number_format(0, ',', '.') }}</td>
                                                     <td>
-                                                        ${{ (entry.amount * entry.price)|number_format(2, ',', '.') }}</td>
+                                                        ${{ (entry.amount * entry.price)|number_format(0, ',', '.') }}</td>
                                                     <td>
                                                         <form method="POST" id="form-{{ entry.id }}">
                                                             <input type="hidden" name="entry-id" value="{{ entry.id }}">
@@ -122,8 +122,8 @@
                                                     <td>{{ sale.name ?? '-' }}</td>
                                                     <td>{{ sale.product.name }}</td>
                                                     <td>{{ sale.amount }}</td>
-                                                    <td>${{ sale.blackMoney|number_format(2, ',', '.') }}</td>
-                                                    <td>${{ sale.blackMoney|number_format(2, ',', '.') }}</td>
+                                                    <td>${{ sale.blackMoney|number_format(0, ',', '.') }}</td>
+                                                    <td>${{ sale.blackMoney|number_format(0, ',', '.') }}</td>
                                                     <td>
                                                         <form method="POST" id="form-{{ sale.id }}">
                                                             <input type="hidden" name="sale-id" value="{{ sale.id }}">

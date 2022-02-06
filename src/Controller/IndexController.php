@@ -1,14 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Entry;
-use App\Entity\Product;
 use App\Entity\Sale;
-use App\Entity\Week;
 use App\Form\EntryType;
 use App\Form\SaleType;
 use App\Service\DateService;
+use App\Service\EvaluationService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -89,18 +90,8 @@ class IndexController extends AbstractController
         ]);
     }
 
-    #[Route(
-        '/evaluation/{week}',
-        name: 'evaluation',
-        requirements: ['week' => '\d{1,2}'],
-        defaults: ['week' => 0]
-    )]
-    public function evaluation(
-        int                    $week,
-        Request                $request,
-        DateService            $dateService,
-        EntityManagerInterface $entityManager
-    ): Response
+    #[Route('/evaluation/{week}', name: 'evaluation', requirements: ['week' => '\d{1,2}'], defaults: ['week' => 0])]
+    public function evaluation(int $week, DateService $dateService, EvaluationService $evaluationService): Response
     {
         if ($week > 52) {
             throw new NotFoundHttpException();
@@ -113,64 +104,11 @@ class IndexController extends AbstractController
 
         [$startDate, $endDate] = $dateService->getStartAndEndOfWeekFromWeekNumber($week);
 
-        $products = $entityManager->getRepository(Product::class)->findBy(['deleted' => false], ['name' => 'ASC']);
-        $entries = $entityManager->getRepository(Entry::class)->findEntriesByWeek($startDate, $endDate);
-        $sales = $entityManager->getRepository(Sale::class)->findSalesByWeek($startDate, $endDate);
-
         return $this->render('index/evaluation.html.twig', [
-            'buyResults' => $this->createBuyResultsArray($products, $entries),
-            'sellResults' => $this->createSellResultsArray($products, $sales),
+            'evaluationData' => $evaluationService->getEvaluationData($startDate, $endDate),
             'startDate' => $startDate,
             'endDate' => $endDate,
             'week' => $week,
         ]);
-    }
-
-    private function createBuyResultsArray(array $products, array $entries): array
-    {
-        $results = [];
-        foreach ($products as $product) {
-            $results[$product->getId()] = [
-                'id' => $product->getId(),
-                'name' => $product->getName(),
-                'amount' => 0,
-                'price' => 0
-            ];
-        }
-
-        foreach ($entries as $entry) {
-            if (array_key_exists($entry['id'], $results)) {
-                $results[$entry['id']]['id'] = $entry['id'];
-                $results[$entry['id']]['amount'] = $entry['amount'];
-                $results[$entry['id']]['price'] = $entry['price'];
-            }
-        }
-
-        return $results;
-    }
-
-    private function createSellResultsArray(array $products, array $sales): array
-    {
-        $results = [];
-        foreach ($products as $product) {
-            $results[$product->getId()] = [
-                'id' => $product->getId(),
-                'name' => $product->getName(),
-                'amount' => 0,
-                'blackMoney' => 0,
-                'realMoney' => 0
-            ];
-        }
-
-        foreach ($sales as $sale) {
-            if (array_key_exists($sale['id'], $results)) {
-                $results[$sale['id']]['id'] = $sale['id'];
-                $results[$sale['id']]['amount'] = $sale['amount'];
-                $results[$sale['id']]['blackMoney'] = $sale['blackMoney'];
-                $results[$sale['id']]['realMoney'] = $sale['realMoney'];
-            }
-        }
-
-        return $results;
     }
 }
