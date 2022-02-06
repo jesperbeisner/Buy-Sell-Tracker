@@ -18,24 +18,26 @@
                         <h4 class="card-title">
                             Käufe
                         </h4>
-                        <table class="table table-hover mt-4 text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col">Produkt</th>
-                                <th scope="col">Anzahl</th>
-                                <th scope="col">Kosten</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for result in buyResults %}
-                                <tr id="product-{{ result.id }}">
-                                    <td style="width: 18%">{{ result.name }}</td>
-                                    <td style="width: 18%">{{ result.amount|number_format(0, ',', '.') }}</td>
-                                    <td style="width: 18%">${{ result.price|number_format(2, ',', '.') }}</td>
+                        <div class="table-responsive">
+                            <table class="table table-hover mt-4 text-center">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Produkt</th>
+                                    <th scope="col">Anzahl</th>
+                                    <th scope="col">Kosten</th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {% for result in buyResults %}
+                                    <tr id="product-{{ result.id }}">
+                                        <td style="width: 18%">{{ result.name }}</td>
+                                        <td style="width: 18%">{{ result.amount|number_format(0, ',', '.') }}</td>
+                                        <td style="width: 18%">${{ result.price|number_format(2, ',', '.') }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -46,26 +48,28 @@
                         <h4 class="card-title">
                             Verkäufe
                         </h4>
-                        <table class="table table-hover mt-4 text-center">
-                            <thead>
-                            <tr>
-                                <th scope="col">Produkt</th>
-                                <th scope="col">Anzahl</th>
-                                <th scope="col">Schwarzgeld</th>
-                                <th scope="col">Echtes Geld</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for result in sellResults %}
-                                <tr id="product-{{ result.id }}">
-                                    <td style="width: 18%">{{ result.name }}</td>
-                                    <td style="width: 18%">{{ result.amount|number_format(0, ',', '.') }}</td>
-                                    <td style="width: 18%">${{ result.blackMoney|number_format(2, ',', '.') }}</td>
-                                    <td style="width: 18%">${{ result.realMoney|number_format(2, ',', '.') }}</td>
+                        <div class="table-responsive">
+                            <table class="table table-hover mt-4 text-center">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Produkt</th>
+                                    <th scope="col">Anzahl</th>
+                                    <th scope="col">Schwarzgeld</th>
+                                    <th scope="col">Echtes Geld</th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {% for result in sellResults %}
+                                    <tr id="product-{{ result.id }}">
+                                        <td style="width: 18%">{{ result.name }}</td>
+                                        <td style="width: 18%">{{ result.amount|number_format(0, ',', '.') }}</td>
+                                        <td style="width: 18%">${{ result.blackMoney|number_format(2, ',', '.') }}</td>
+                                        <td style="width: 18%">${{ result.realMoney|number_format(2, ',', '.') }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
