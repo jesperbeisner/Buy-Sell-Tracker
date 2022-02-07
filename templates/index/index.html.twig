@@ -123,7 +123,7 @@
                                                     <td>{{ sale.product.name }}</td>
                                                     <td>{{ sale.amount }}</td>
                                                     <td>${{ sale.blackMoney|number_format(0, ',', '.') }}</td>
-                                                    <td>${{ sale.blackMoney|number_format(0, ',', '.') }}</td>
+                                                    <td>${{ sale.realMoney|number_format(0, ',', '.') }}</td>
                                                     <td>
                                                         <form method="POST" id="form-{{ sale.id }}">
                                                             <input type="hidden" name="sale-id" value="{{ sale.id }}">
