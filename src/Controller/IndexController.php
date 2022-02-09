@@ -61,10 +61,13 @@ class IndexController extends AbstractController
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
         $buyForm = $this->createForm(EntryType::class);
+        $buyForm->setData(new Entry());
         $buyForm->handleRequest($request);
 
         if ($buyForm->isSubmitted() && $buyForm->isValid()) {
+            /** @var Entry $entry */
             $entry = $buyForm->getViewData();
+            $entry->updateTime();
             $entityManager->persist($entry);
             $entityManager->flush();
 
@@ -73,10 +76,13 @@ class IndexController extends AbstractController
         }
 
         $sellForm = $this->createForm(SaleType::class);
+        $sellForm->setData(new Sale());
         $sellForm->handleRequest($request);
 
         if ($sellForm->isSubmitted() && $sellForm->isValid()) {
+            /** @var Sale $sale */
             $sale = $sellForm->getViewData();
+            $sale->updateTime();
             $entityManager->persist($sale);
             $entityManager->flush();
 

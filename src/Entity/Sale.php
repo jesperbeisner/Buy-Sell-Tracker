@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\SaleRepository;
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SaleRepository::class)]
@@ -106,5 +107,16 @@ class Sale
     public function setCreated(DateTime $created): void
     {
         $this->created = $created;
+    }
+
+    public function updateTime(): void
+    {
+        $dateTime = new DateTime();
+
+        $this->created->setTime(
+            $dateTime->format('H'),
+            $dateTime->format('i'),
+            $dateTime->format('s')
+        );
     }
 }

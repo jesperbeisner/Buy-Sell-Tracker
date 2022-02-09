@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\EntryRepository;
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: EntryRepository::class)]
@@ -122,5 +123,16 @@ class Entry
     public function setName(?string $name): void
     {
         $this->name = $name;
+    }
+
+    public function updateTime(): void
+    {
+        $dateTime = new DateTime();
+
+        $this->created->setTime(
+            $dateTime->format('H'),
+            $dateTime->format('i'),
+            $dateTime->format('s')
+        );
     }
 }

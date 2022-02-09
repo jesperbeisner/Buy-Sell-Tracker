@@ -7,6 +7,7 @@ use App\Entity\Sale;
 use App\Repository\ProductRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -32,6 +33,14 @@ class SaleType extends AbstractType
             ])
             ->add('realMoney', NumberType::class, [
                 'label' => 'Echtes Geld',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('created', DateType::class, [
+                'widget' => 'single_text',
+                'format' => 'dd.MM.yyyy',
+                'html5' => false,
+                'years' => [2022],
+                'label' => 'Datum',
                 'attr' => ['class' => 'form-control']
             ])
             ->add('product', EntityType::class, [
