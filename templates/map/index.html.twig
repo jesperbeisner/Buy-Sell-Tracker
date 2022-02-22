@@ -1,0 +1,46 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row mt-3">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="x-value" class="form-label">X-Position</label>
+                                    <input type="number" class="form-control" id="x-value" name="x-value">
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="y-value" class="form-label">Y-Position</label>
+                                    <input type="number" class="form-control" id="y-value" name="y-value">
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-md-12">
+                                    <button type="submit" class="btn btn-primary" name="action" value="map-save">
+                                        Speichern
+                                    </button>
+                                    <button type="submit" class="btn btn-danger" name="action" value="map-regenerate">
+                                        Wiederherstellen
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <div class="row mt-3 mb-3 text-center">
+            <div class="col-md-12">
+                <img src="{{ asset('img/map/' ~ mapEdited) }}" alt="GTA Map" id="gta-map">
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ asset('js/map.js') }}"></script>
+{% endblock %}

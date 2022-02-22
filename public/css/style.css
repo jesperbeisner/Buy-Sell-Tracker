@@ -9,3 +9,12 @@ body {
 .page-title {
     font-size: 1.75rem;
 }
+
+.root {
+    width: 100%;
+    text-align: center;
+}
+
+#gta-map {
+    cursor: pointer;
+}
