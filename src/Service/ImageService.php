@@ -74,34 +74,43 @@ class ImageService
 
         $colorWhite = imagecolorallocate($image, 255, 255, 255);
         $colorBlack = imagecolorallocate($image, 0, 0, 0);
+        $colorRed = imagecolorallocate($image, 255, 0, 0);
 
         // Draw 25 pixel to down right
-        imageline($image, $xValue, $yValue - 2, $xValue + $length, $yValue - 2 + $length, $colorBlack);
+        imageline($image, $xValue, $yValue - 3, $xValue + $length, $yValue - 3 + $length, $colorBlack);
+        imageline($image, $xValue, $yValue - 2, $xValue + $length, $yValue - 2 + $length, $colorWhite);
         imageline($image, $xValue, $yValue - 1, $xValue + $length, $yValue - 1 + $length, $colorWhite);
-        imageline($image, $xValue, $yValue, $xValue + $length, $yValue + $length, $colorWhite);
+        imageline($image, $xValue, $yValue, $xValue + $length, $yValue + $length, $colorRed);
         imageline($image, $xValue, $yValue + 1, $xValue + $length, $yValue + 1 + $length, $colorWhite);
-        imageline($image, $xValue, $yValue + 2, $xValue + $length, $yValue + 2 + $length, $colorBlack);
+        imageline($image, $xValue, $yValue + 2, $xValue + $length, $yValue + 2 + $length, $colorWhite);
+        imageline($image, $xValue, $yValue + 3, $xValue + $length, $yValue + 3 + $length, $colorBlack);
 
         // Draw 25 pixel to upper left
-        imageline($image, $xValue, $yValue - 2, $xValue - $length, $yValue - 2 - $length, $colorBlack);
+        imageline($image, $xValue, $yValue - 3, $xValue - $length, $yValue - 3 - $length, $colorBlack);
+        imageline($image, $xValue, $yValue - 2, $xValue - $length, $yValue - 2 - $length, $colorWhite);
         imageline($image, $xValue, $yValue - 1, $xValue - $length, $yValue - 1 - $length, $colorWhite);
-        imageline($image, $xValue, $yValue, $xValue - $length, $yValue - $length, $colorWhite);
+        imageline($image, $xValue, $yValue, $xValue - $length, $yValue - $length, $colorRed);
         imageline($image, $xValue, $yValue + 1, $xValue - $length, $yValue + 1 - $length, $colorWhite);
-        imageline($image, $xValue, $yValue + 2, $xValue - $length, $yValue + 2 - $length, $colorBlack);
+        imageline($image, $xValue, $yValue + 2, $xValue - $length, $yValue + 2 - $length, $colorWhite);
+        imageline($image, $xValue, $yValue + 3, $xValue - $length, $yValue + 3 - $length, $colorBlack);
 
         // Draw 25 pixel to upper right
-        imageline($image, $xValue, $yValue - 2, $xValue + $length, $yValue - 2 - $length, $colorBlack);
+        imageline($image, $xValue, $yValue - 3, $xValue + $length, $yValue - 3 - $length, $colorBlack);
+        imageline($image, $xValue, $yValue - 2, $xValue + $length, $yValue - 2 - $length, $colorWhite);
         imageline($image, $xValue, $yValue - 1, $xValue + $length, $yValue - 1 - $length, $colorWhite);
-        imageline($image, $xValue, $yValue, $xValue + $length, $yValue - $length, $colorWhite);
+        imageline($image, $xValue, $yValue, $xValue + $length, $yValue - $length, $colorRed);
         imageline($image, $xValue, $yValue + 1, $xValue + $length, $yValue + 1 - $length, $colorWhite);
-        imageline($image, $xValue, $yValue + 2, $xValue + $length, $yValue + 2 - $length, $colorBlack);
+        imageline($image, $xValue, $yValue + 2, $xValue + $length, $yValue + 2 - $length, $colorWhite);
+        imageline($image, $xValue, $yValue + 3, $xValue + $length, $yValue + 3 - $length, $colorBlack);
 
         // Draw 25 pixel to down left
-        imageline($image, $xValue, $yValue - 2, $xValue - $length, $yValue - 2 + $length, $colorBlack);
+        imageline($image, $xValue, $yValue - 3, $xValue - $length, $yValue - 3 + $length, $colorBlack);
+        imageline($image, $xValue, $yValue - 2, $xValue - $length, $yValue - 2 + $length, $colorWhite);
         imageline($image, $xValue, $yValue - 1, $xValue - $length, $yValue - 1 + $length, $colorWhite);
-        imageline($image, $xValue, $yValue, $xValue - $length, $yValue + $length, $colorWhite);
+        imageline($image, $xValue, $yValue, $xValue - $length, $yValue + $length, $colorRed);
         imageline($image, $xValue, $yValue + 1, $xValue - $length, $yValue + 1 + $length, $colorWhite);
-        imageline($image, $xValue, $yValue + 2, $xValue - $length, $yValue + 2 + $length, $colorBlack);
+        imageline($image, $xValue, $yValue + 2, $xValue - $length, $yValue + 2 + $length, $colorWhite);
+        imageline($image, $xValue, $yValue + 3, $xValue - $length, $yValue + 3 + $length, $colorBlack);
 
         foreach (glob($this->mapDir . 'map-edited-*.png') as $imageName) {
             unlink($imageName);
