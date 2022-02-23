@@ -22,8 +22,8 @@ class MapPosition
     #[ORM\Column(type: 'integer')]
     private int $y;
 
-    #[ORM\Column(type: 'integer')]
-    private int $size;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $size = 10;
 
     #[ORM\Column(type: 'datetime')]
     private DateTime $created;
@@ -63,12 +63,12 @@ class MapPosition
         $this->y = $y;
     }
 
-    public function getSize(): int
+    public function getSize(): ?int
     {
         return $this->size;
     }
 
-    public function setSize(int $size): void
+    public function setSize(?int $size): void
     {
         $this->size = $size;
     }
