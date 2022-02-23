@@ -5,6 +5,7 @@
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
     app.map-original: '%kernel.project_dir%/public/img/map/map-original.png'
+    app.map-edited: '%kernel.project_dir%/public/img/map/map-edited.png'
 
 services:
     # default configuration for services in *this* file
@@ -13,6 +14,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             $mapOriginal: '%app.map-original%'
+            $mapEdited: '%app.map-edited%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name

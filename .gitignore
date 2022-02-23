@@ -8,5 +8,5 @@
 /vendor/
 ###< symfony/framework-bundle ###
 
-/public/img/map/*
+/public/img/map/map-edited.png
 !public/img/map/map-original.png

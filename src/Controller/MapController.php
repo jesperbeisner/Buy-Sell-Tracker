@@ -24,6 +24,7 @@ class MapController extends AbstractController
             if ($action === 'map-save') {
                 $xValue = (int) $request->request->get('x-value', -1);
                 $yValue = (int) $request->request->get('y-value', -1);
+                $xSize = (int) $request->request->get('x-size', 10);
 
                 if ($xValue < 0 || $yValue < 0) {
                     $this->addFlash('error', 'Die X-Position und Y-Position müssen beide ausgefüllt sein und dürfen nicht im negativen Bereich liegen');
@@ -36,16 +37,23 @@ class MapController extends AbstractController
                     return $this->redirectToRoute('map');
                 }
 
-                $imageService->draw($xValue, $yValue);
+                $imageService->draw($xValue, $yValue, $xSize);
 
                 $this->addFlash('success', 'Die Markierung wurde erfolgreich hinzugefügt');
                 return $this->redirectToRoute('map');
             }
 
             if ($action === 'map-regenerate') {
-                $imageService->regenerate();
+                $imageService->regenerateMap();
 
                 $this->addFlash('success', 'Die Map wurde erfolgreich wiederhergestellt');
+                return $this->redirectToRoute('map');
+            }
+
+            if ($action === 'map-delete') {
+                $imageService->deleteLastMapEntry();
+
+                $this->addFlash('success', 'Der letzte Eintrag wurde erfolgreich gelöscht');
                 return $this->redirectToRoute('map');
             }
 
@@ -54,7 +62,7 @@ class MapController extends AbstractController
         }
 
         return $this->render('map/index.html.twig', [
-            'mapEdited' => $imageService->getCurrentMapEditedName(),
+            'mapEditedFileTime' => $imageService->getCurrentMapEditedFileTime(),
         ]);
     }
 }
