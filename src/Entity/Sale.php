@@ -6,7 +6,6 @@ namespace App\Entity;
 
 use App\Repository\SaleRepository;
 use DateTime;
-use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SaleRepository::class)]
@@ -116,9 +115,9 @@ class Sale
         $dateTime = new DateTime();
 
         $this->created->setTime(
-            $dateTime->format('H'),
-            $dateTime->format('i'),
-            $dateTime->format('s')
+            (int) $dateTime->format('H'),
+            (int) $dateTime->format('i'),
+            (int) $dateTime->format('s')
         );
     }
 }
