@@ -43,10 +43,10 @@ class MapController extends AbstractController
                 return $this->redirectToRoute('map');
             }
 
-            if ($action === 'map-regenerate') {
+            if ($action === 'map-reset') {
                 $imageService->regenerateMap();
 
-                $this->addFlash('success', 'Die Map wurde erfolgreich wiederhergestellt');
+                $this->addFlash('success', 'Die Karte wurde erfolgreich zurückgesetzt');
                 return $this->redirectToRoute('map');
             }
 

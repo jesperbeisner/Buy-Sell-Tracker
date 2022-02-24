@@ -27,10 +27,10 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
-                                    <button type="submit" class="btn btn-secondary" name="action" value="map-delete">
+                                    <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-delete">
                                         Letzten Wert löschen
                                     </button>
-                                    <button type="submit" class="btn btn-danger" name="action" value="map-regenerate">
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal-reset">
                                         Karte zurücksetzen
                                     </button>
                                 </div>
@@ -45,6 +45,50 @@
         <div class="row mt-3 mb-3 text-center">
             <div class="col-lg-12">
                 <img src="{{ asset('img/map/map-edited.png?' ~ mapEditedFileTime) }}" alt="GTA Map" id="gta-map">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-delete" tabindex="-1" aria-labelledby="modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-label">Letzten Wert löschen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center fw-bold">
+                    Soll der letzte Wert wirklich gelöscht werden?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                    <form method="POST">
+                        <button type="submit" class="btn btn-primary" name="action" value="map-delete">
+                            Letzten Wert löschen
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modal-reset" tabindex="-1" aria-labelledby="modal-label" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-label">Karte zurücksetzen</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center fw-bold">
+                    Soll die Karte wirklich komplett zurückgesetzt werden?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Schließen</button>
+                    <form method="POST">
+                        <button type="submit" class="btn btn-primary" name="action" value="map-reset">
+                            Karte zurücksetzen
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
