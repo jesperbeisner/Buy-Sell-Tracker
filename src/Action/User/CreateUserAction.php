@@ -38,7 +38,7 @@ final class CreateUserAction
             return new CreateUserResult(Result::FAILURE, 'Das Passwort muss mindestens 8 Zeichen lang sein!');
         }
 
-        if (null !== $this->entityManager->getRepository(User::class)->findOneBy(['username' => $username])) {
+        if (null !== $this->entityManager->getRepository(User::class)->findByUsername($username)) {
             return new CreateUserResult(Result::FAILURE, 'Ein User mit diesem Usernamen existiert bereits!');
         }
 
