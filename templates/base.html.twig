@@ -35,10 +35,30 @@
                             <a class="nav-link" href="{{ path('evaluation') }}">Auswertung</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('settings') }}">Einstellungen</a>
-                        </li>
-                        <li class="nav-item">
                             <a class="nav-link" href="{{ path('map') }}">Map</a>
+                        </li>
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('user') }}">User</a>
+                            </li>
+                        {% endif %}
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">Einstellungen</a>
+                            <ul class="dropdown-menu" aria-labelledby="dropdown">
+                                <li><a class="dropdown-item" href="{{ path('settings') }}">Verkäufer hinzufügen</a></li>
+                                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                    <li><a class="dropdown-item" href="{{ path('change-password') }}">Passwort ändern</a></li>
+                                {% endif %}
+                            </ul>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                <a class="nav-link" href="{{ path('logout') }}">Logout</a>
+                            {% else %}
+                                <a class="nav-link" href="{{ path('login') }}">Login</a>
+                            {% endif %}
                         </li>
                     </ul>
                 </div>

@@ -48,6 +48,9 @@
             </div>
         </div>
     </div>
+{% endblock %}
 
+{% block javascriptbottom %}
+    {{ parent() }}
     <script src="{{ asset('js/map.js') }}"></script>
 {% endblock %}
