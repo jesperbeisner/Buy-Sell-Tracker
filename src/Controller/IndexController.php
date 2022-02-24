@@ -21,8 +21,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    public function index(): Response
     {
+        return $this->render('index/index.html.twig');
+    }
+
+    #[Route('/overview', name: 'overview')]
+    public function overview(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
+
         if ($request->isMethod('POST')) {
             $actionName = $request->request->get('action');
 
@@ -48,10 +56,10 @@ class IndexController extends AbstractController
                 }
             }
 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('overview');
         }
 
-        return $this->render('index/index.html.twig', [
+        return $this->render('index/overview.html.twig', [
             'entries' => $entityManager->getRepository(Entry::class)->findBy([], ['created' => 'DESC']),
             'sales' => $entityManager->getRepository(Sale::class)->findBy([], ['created' => 'DESC']),
         ]);
@@ -60,6 +68,8 @@ class IndexController extends AbstractController
     #[Route('/add', name: 'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
+
         $buyForm = $this->createForm(EntryType::class);
         $buyForm->setData(new Entry());
         $buyForm->handleRequest($request);
@@ -99,6 +109,8 @@ class IndexController extends AbstractController
     #[Route('/evaluation/{week}', name: 'evaluation', requirements: ['week' => '\d{1,2}'], defaults: ['week' => 0])]
     public function evaluation(int $week, DateService $dateService, EvaluationService $evaluationService): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
+
         if ($week > 52) {
             throw new NotFoundHttpException();
         }

@@ -72,4 +72,50 @@ class UserController extends AbstractController
             'users' => $entityManager->getRepository(User::class)->findAll(),
         ]);
     }
+
+    #[Route('/user/role/{userId<\d+>}', name: 'role')]
+    public function role(int $userId, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        /** @var User $sessionUser */
+        $sessionUser = $this->getUser();
+        if ($sessionUser->getId() === $userId) {
+            $this->addFlash('error', 'Du kannst deine eigene Rolle nicht ändern');
+            return $this->redirectToRoute('user');
+        }
+
+        if (null === $user = $entityManager->getRepository(User::class)->find($userId)) {
+            throw $this->createNotFoundException();
+        }
+
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
+            $this->addFlash('error', 'Du kannst die Rolle von Admins nicht ändern');
+            return $this->redirectToRoute('user');
+        }
+
+        if ($request->isMethod('POST')) {
+            $roles = ['ROLE_USER', 'ROLE_SUPER_USER'];
+            if (null === $role = $request->request->get('role')) {
+                $this->addFlash('error', 'Keine Rolle ausgewählt');
+                return $this->redirectToRoute('role', ['userId' => $user->getId()]);
+            }
+
+            if (!in_array($role, $roles)) {
+                $this->addFlash('error', 'Keine passende Rolle ausgewählt');
+                return $this->redirectToRoute('role', ['userId' => $user->getId()]);
+            }
+
+            $user->setRoles([$role]);
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Die Rolle wurde erfolgreich angepasst');
+            return $this->redirectToRoute('user');
+        }
+
+        return $this->render('user/role.html.twig', [
+            'user' => $user
+        ]);
+    }
 }

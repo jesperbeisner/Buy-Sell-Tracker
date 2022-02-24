@@ -6,6 +6,10 @@ security:
         App\Entity\User:
             algorithm: auto
 
+    role_hierarchy:
+        ROLE_SUPER_USER: ROLE_USER
+        ROLE_ADMIN: ROLE_SUPER_USER
+
     # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
         # used to reload user from session & other features (e.g. switch_user)
@@ -25,9 +29,11 @@ security:
                 login_path: login
                 check_path: login
                 enable_csrf: true
+                default_target_path: map
 
             logout:
                 path: logout
+                target: index
 
             # activate different ways to authenticate
             # https://symfony.com/doc/current/security.html#the-firewall

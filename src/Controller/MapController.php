@@ -15,6 +15,8 @@ class MapController extends AbstractController
     #[Route('/map', name: 'map')]
     public function map(Request $request, ImageService $imageService,): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_USER');
+
         if ($request->isMethod('POST')) {
             if (null === $action = $request->request->get('action')) {
                 $this->addFlash('error', 'Keine Action vorhanden');

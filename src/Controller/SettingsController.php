@@ -16,6 +16,8 @@ class SettingsController extends AbstractController
     #[Route('/settings', name: 'settings')]
     public function settings(Request $request, EntityManagerInterface $entityManager): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
+
         if ($request->isMethod('POST')) {
             $action = $request->request->get('button');
 

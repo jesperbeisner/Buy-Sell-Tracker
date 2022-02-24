@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% set superUser = false %}
+    {% if 'ROLE_SUPER_USER' in user.roles %}
+        {% set superUser = true %}
+    {% endif %}
+
+    <div class="container mt-3 mb-3">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-title">Rolle ändern</h1>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-lg-12">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <form method="POST">
+                            <div class="mb-3">
+                                <select class="form-select" aria-label="Default select example" name="role">
+                                    {% if superUser %}
+                                        <option value="ROLE_USER">User</option>
+                                        <option value="ROLE_SUPER_USER" selected>Superuser</option>
+                                    {% else %}
+                                        <option value="ROLE_USER" selected>User</option>
+                                        <option value="ROLE_SUPER_USER">Superuser</option>
+                                    {% endif %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="action" value="create">
+                                Ändern
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
