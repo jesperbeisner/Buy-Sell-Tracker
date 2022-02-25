@@ -1,0 +1,29 @@
+{% set successMessages = app.flashes('success') %}
+{% if successMessages is not empty %}
+    <div class="container mt-3 text-center" id="success-alert-container">
+        <div class="row">
+            <div class="col">
+                {% for message in successMessages %}
+                    <div class="alert alert-success m-0" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% set errorMessages = app.flashes('error') %}
+{% if errorMessages is not empty %}
+    <div class="container mt-3 text-center" id="error-alert-container">
+        <div class="row">
+            <div class="col">
+                {% for message in errorMessages %}
+                    <div class="alert alert-danger m-0" role="alert">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}

@@ -18,3 +18,11 @@ body {
 #gta-map {
     cursor: pointer;
 }
+
+.click-icon {
+    cursor: pointer;
+}
+
+.click-icon:hover {
+    opacity: 0.75;
+}
