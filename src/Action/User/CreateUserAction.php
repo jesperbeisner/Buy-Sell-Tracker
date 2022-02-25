@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Entity\User;
-use App\Result\CreateUserResult;
+use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -19,7 +19,7 @@ final class CreateUserAction
         private EntityManagerInterface $entityManager,
     ) {}
 
-    public function __invoke(): CreateUserResult
+    public function __invoke(): ActionResult
     {
         $request = $this->requestStack->getCurrentRequest();
 
@@ -27,19 +27,19 @@ final class CreateUserAction
         $password = $request->request->get('password');
 
         if ($username === null || $password === null) {
-            return new CreateUserResult(Result::FAILURE, 'Username und Passwort müssen beide gesetzt sein!');
+            return new ActionResult(Result::FAILURE, 'Username und Passwort müssen beide gesetzt sein!');
         }
 
         if (strlen($username) < 3 || strlen($username) > 50) {
-            return new CreateUserResult(Result::FAILURE, 'Der Username muss mindestens 3 und maximal 50 Zeichen lang sein!');
+            return new ActionResult(Result::FAILURE, 'Der Username muss mindestens 3 und maximal 50 Zeichen lang sein!');
         }
 
         if (strlen($password) < 8) {
-            return new CreateUserResult(Result::FAILURE, 'Das Passwort muss mindestens 8 Zeichen lang sein!');
+            return new ActionResult(Result::FAILURE, 'Das Passwort muss mindestens 8 Zeichen lang sein!');
         }
 
         if (null !== $this->entityManager->getRepository(User::class)->findByUsername($username)) {
-            return new CreateUserResult(Result::FAILURE, 'Ein User mit diesem Usernamen existiert bereits!');
+            return new ActionResult(Result::FAILURE, 'Ein User mit diesem Usernamen existiert bereits!');
         }
 
         $user = new User();
@@ -50,6 +50,6 @@ final class CreateUserAction
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        return new CreateUserResult(Result::SUCCESS, 'Der User wurde erfolgreich angelegt!');
+        return new ActionResult(Result::SUCCESS, 'Der User wurde erfolgreich angelegt!');
     }
 }

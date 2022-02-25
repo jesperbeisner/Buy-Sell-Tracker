@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Entity\User;
-use App\Result\DeleteUserResult;
+use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -20,7 +20,7 @@ final class DeleteUserAction
         private EntityManagerInterface $entityManager,
     ) {}
 
-    public function __invoke(): DeleteUserResult
+    public function __invoke(): ActionResult
     {
         /** @var User|null $user */
         if (null === $user = $this->security->getUser()) {
@@ -29,20 +29,20 @@ final class DeleteUserAction
 
         $request = $this->requestStack->getCurrentRequest();
         if (null === $userId = $request->request->get('user')) {
-            return new DeleteUserResult(Result::FAILURE, 'Kein User zum Löschen ausgewählt!');
+            return new ActionResult(Result::FAILURE, 'Kein User zum Löschen ausgewählt!');
         }
 
         if ($user->getId() === (int) $userId) {
-            return new DeleteUserResult(Result::FAILURE, 'Du kannst deinen eigenen User nicht löschen!');
+            return new ActionResult(Result::FAILURE, 'Du kannst deinen eigenen User nicht löschen!');
         }
 
         if (null === $deleteUser = $this->entityManager->getRepository(User::class)->find($userId)) {
-            return new DeleteUserResult(Result::FAILURE, 'Keinen passenden User zum Löschen gefunden!');
+            return new ActionResult(Result::FAILURE, 'Keinen passenden User zum Löschen gefunden!');
         }
 
         $this->entityManager->remove($deleteUser);
         $this->entityManager->flush();
 
-        return new DeleteUserResult(Result::SUCCESS, 'Der User wurde erfolgreich gelöscht!');
+        return new ActionResult(Result::SUCCESS, 'Der User wurde erfolgreich gelöscht!');
     }
 }

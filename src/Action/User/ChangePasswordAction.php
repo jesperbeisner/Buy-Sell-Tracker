@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Entity\User;
-use App\Result\ChangePasswordResult;
+use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
@@ -22,7 +22,7 @@ final class ChangePasswordAction
         private EntityManagerInterface $entityManager,
     ) {}
 
-    public function __invoke(): ChangePasswordResult
+    public function __invoke(): ActionResult
     {
         /** @var User|null $user */
         if (null === $user = $this->security->getUser()) {
@@ -35,15 +35,15 @@ final class ChangePasswordAction
         $newPasswordRepeat = $request->request->get('new-password-repeat');
 
         if ($newPassword === null || $newPasswordRepeat === null) {
-            return new ChangePasswordResult(Result::FAILURE, 'Beide Passwörter müssen gesetzt sein!');
+            return new ActionResult(Result::FAILURE, 'Beide Passwörter müssen gesetzt sein!');
         }
 
         if ($newPassword !== $newPasswordRepeat) {
-            return new ChangePasswordResult(Result::FAILURE, 'Beide Passwörter müssen identisch sein!');
+            return new ActionResult(Result::FAILURE, 'Beide Passwörter müssen identisch sein!');
         }
 
         if (strlen($newPassword) < 8) {
-            return new ChangePasswordResult(Result::FAILURE, 'Das Passwort muss mindestens 8 Zeichen lang sein!');
+            return new ActionResult(Result::FAILURE, 'Das Passwort muss mindestens 8 Zeichen lang sein!');
         }
 
         $hashedPassword = $this->passwordHasher->hashPassword($user, $newPassword);
@@ -52,6 +52,6 @@ final class ChangePasswordAction
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 
-        return new ChangePasswordResult(Result::SUCCESS, 'Das Passwort wurde erfolgreich geändert!');
+        return new ActionResult(Result::SUCCESS, 'Das Passwort wurde erfolgreich geändert!');
     }
 }

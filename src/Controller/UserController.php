@@ -30,7 +30,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('change-password');
         }
 
-        return $this->render('user/change-password.html.twig');
+        return $this->render('user/password.html.twig');
     }
 
     #[Route('/user', name: 'user')]

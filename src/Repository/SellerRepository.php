@@ -20,4 +20,16 @@ class SellerRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Seller::class);
     }
+
+    public function findByName(string $name): ?Seller
+    {
+        $name = strtolower($name);
+
+        return $this->createQueryBuilder('s')
+            ->where('LOWER(s.name) = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
 }

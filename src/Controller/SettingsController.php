@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Action\Seller\CreateSellerAction;
+use App\Action\Seller\DeleteSellerAction;
 use App\Entity\Seller;
+use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,31 +16,45 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SettingsController extends AbstractController
 {
-    #[Route('/settings', name: 'settings')]
-    public function settings(Request $request, EntityManagerInterface $entityManager): Response
-    {
+    #[Route('/seller', name: 'seller')]
+    public function seller(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        CreateSellerAction $createSellerAction,
+        DeleteSellerAction $deleteSellerAction,
+    ): Response {
         $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
 
         if ($request->isMethod('POST')) {
-            $action = $request->request->get('button');
-
-            if ($action === 'seller') {
-                $sellerName = $request->request->get('seller');
-                if (null === $entityManager->getRepository(Seller::class)->findOneBy(['name' => $sellerName])) {
-                    $seller = new Seller();
-                    $seller->setName($sellerName);
-                    $entityManager->persist($seller);
-                    $entityManager->flush();
-
-                    $this->addFlash('success', 'Der Verkäufer wurde erfolgreich hinzugefügt');
-                    return $this->redirectToRoute('settings');
-                }
-
-                $this->addFlash('error', 'Ein Verkäufer mit diesem Namen existiert bereits');
-                return $this->redirectToRoute('settings');
+            if (null === $action = $request->request->get('action')) {
+                $this->addFlash('error', 'Keine Action angegeben');
+                return $this->redirectToRoute('seller');
             }
+
+            if ($action === 'add') {
+                $createSellerResult = $createSellerAction();
+                $type = $createSellerResult->getResult() === Result::SUCCESS ? 'success' : 'error';
+                $this->addFlash($type, $createSellerResult->getMessage());
+
+                return $this->redirectToRoute('seller');
+            }
+
+            if ($action === 'delete') {
+                $deleteSellerResult = $deleteSellerAction();
+                $type = $deleteSellerResult->getResult() === Result::SUCCESS ? 'success' : 'error';
+                $this->addFlash($type, $deleteSellerResult->getMessage());
+
+                return $this->redirectToRoute('seller');
+            }
+
+            $this->addFlash('error', 'Keine passende Action gefunden');
+            return $this->redirectToRoute('seller');
         }
 
-        return $this->render('settings/index.html.twig');
+        $sellers = $entityManager->getRepository(Seller::class)->findBy(['deleted' => false]);
+
+        return $this->render('seller/index.html.twig', [
+            'sellers' => $sellers,
+        ]);
     }
 }
