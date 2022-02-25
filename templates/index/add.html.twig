@@ -27,101 +27,91 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="buy" role="tabpanel" aria-labelledby="buy-tab">
                                 {{ form_start(form) }}
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(form.name) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(form.amount) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(form.amount) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(form.price) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(form.price) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(form.shift) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(form.shift) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(form.product) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(form.product) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(form.seller) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(form.seller) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(form.created) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(form.created) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(form.save) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(form.save) }}
-                                    </div>
-                                </div>
-                                {{ form_rest(form) }}
+                                    {{ form_rest(form) }}
                                 {{ form_end(form) }}
                             </div>
 
                             <div class="tab-pane fade" id="sell" role="tabpanel" aria-labelledby="sell-tab">
                                 {{ form_start(sellForm) }}
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(sellForm.name) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(sellForm.amount) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(sellForm.amount) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(sellForm.blackMoney) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(sellForm.blackMoney) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(sellForm.realMoney) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(sellForm.realMoney) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(sellForm.product) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(sellForm.product) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(sellForm.created) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(sellForm.created) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(sellForm.save) }}
+                                        </div>
                                     </div>
-                                </div>
 
-                                <div class="row mt-4">
-                                    <div class="col-md-12">
-                                        {{ form_row(sellForm.save) }}
-                                    </div>
-                                </div>
-                                {{ form_rest(sellForm) }}
+                                    {{ form_rest(sellForm) }}
                                 {{ form_end(sellForm) }}
                             </div>
                         </div>

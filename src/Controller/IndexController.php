@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Entity\Entry;
 use App\Entity\Sale;
+use App\Entity\User;
 use App\Form\EntryType;
 use App\Form\SaleType;
 use App\Service\DateService;
@@ -70,6 +71,9 @@ class IndexController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
 
+        /** @var User $user */
+        $user = $this->getUser();
+
         $buyForm = $this->createForm(EntryType::class);
         $buyForm->setData(new Entry());
         $buyForm->handleRequest($request);
@@ -78,6 +82,8 @@ class IndexController extends AbstractController
             /** @var Entry $entry */
             $entry = $buyForm->getViewData();
             $entry->updateTime();
+            $entry->setName($user->getUsername());
+
             $entityManager->persist($entry);
             $entityManager->flush();
 
@@ -93,6 +99,8 @@ class IndexController extends AbstractController
             /** @var Sale $sale */
             $sale = $sellForm->getViewData();
             $sale->updateTime();
+            $sale->setName($user->getUsername());
+
             $entityManager->persist($sale);
             $entityManager->flush();
 

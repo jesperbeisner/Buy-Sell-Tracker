@@ -23,10 +23,6 @@ class EntryType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name', TextType::class, [
-                'label' => 'Name',
-                'attr' => ['class' => 'form-control']
-            ])
             ->add('amount', NumberType::class, [
                 'label' => 'Anzahl',
                 'attr' => ['class' => 'form-control']

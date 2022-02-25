@@ -12,7 +12,7 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        foreach (['Zivi', 'Fraktion', 'Hells Angels', 'Continental'] as $sellerName) {
+        foreach (['Apfel', 'Tomate', 'Zitrone', 'Banane'] as $sellerName) {
             $seller = new Seller();
             $seller->setName($sellerName);
             $manager->persist($seller);
