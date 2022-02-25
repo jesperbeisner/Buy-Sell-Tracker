@@ -51,7 +51,7 @@ class SettingsController extends AbstractController
             return $this->redirectToRoute('seller');
         }
 
-        $sellers = $entityManager->getRepository(Seller::class)->findBy(['deleted' => false]);
+        $sellers = $entityManager->getRepository(Seller::class)->findBy(['deleted' => false], ['name' => 'ASC']);
 
         return $this->render('seller/index.html.twig', [
             'sellers' => $sellers,
