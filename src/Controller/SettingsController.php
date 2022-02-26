@@ -32,7 +32,7 @@ class SettingsController extends AbstractController
             }
 
             if ($action === 'add') {
-                $createSellerResult = $createSellerAction();
+                $createSellerResult = $createSellerAction->execute();
                 $type = $createSellerResult->getResult() === Result::SUCCESS ? 'success' : 'error';
                 $this->addFlash($type, $createSellerResult->getMessage());
 
@@ -40,7 +40,7 @@ class SettingsController extends AbstractController
             }
 
             if ($action === 'delete') {
-                $deleteSellerResult = $deleteSellerAction();
+                $deleteSellerResult = $deleteSellerAction->execute();
                 $type = $deleteSellerResult->getResult() === Result::SUCCESS ? 'success' : 'error';
                 $this->addFlash($type, $deleteSellerResult->getMessage());
 

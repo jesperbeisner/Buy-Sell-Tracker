@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Action\User;
 
+use App\Action\ActionInterface;
 use App\Entity\User;
 use App\Result\ActionResult;
 use App\Result\Result;
@@ -11,7 +12,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-final class CreateUserAction
+final class CreateUserAction implements ActionInterface
 {
     public function __construct(
         private RequestStack $requestStack,
@@ -19,7 +20,7 @@ final class CreateUserAction
         private EntityManagerInterface $entityManager,
     ) {}
 
-    public function __invoke(): ActionResult
+    public function execute(): ActionResult
     {
         $request = $this->requestStack->getCurrentRequest();
 

@@ -23,7 +23,7 @@ class UserController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_USER');
 
         if ($request->isMethod('POST')) {
-            $changePasswordResult = $changePasswordAction();
+            $changePasswordResult = $changePasswordAction->execute();
             $type = $changePasswordResult->getResult() === Result::SUCCESS ? 'success' : 'error';
             $this->addFlash($type, $changePasswordResult->getMessage());
 
@@ -49,7 +49,7 @@ class UserController extends AbstractController
             }
 
             if ($action === 'create') {
-                $createUserResult = $createUserAction();
+                $createUserResult = $createUserAction->execute();
                 $type = $createUserResult->getResult() === Result::SUCCESS ? 'success' : 'error';
                 $this->addFlash($type, $createUserResult->getMessage());
 
@@ -57,7 +57,7 @@ class UserController extends AbstractController
             }
 
             if ($action === 'delete') {
-                $createUserResult = $deleteUserAction();
+                $createUserResult = $deleteUserAction->execute();
                 $type = $createUserResult->getResult() === Result::SUCCESS ? 'success' : 'error';
                 $this->addFlash($type, $createUserResult->getMessage());
 

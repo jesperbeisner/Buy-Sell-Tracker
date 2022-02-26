@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace App\Action\Seller;
 
+use App\Action\ActionInterface;
 use App\Entity\Seller;
 use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
-final class DeleteSellerAction
+final class DeleteSellerAction implements ActionInterface
 {
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
     ) {}
 
-    public function __invoke(): ActionResult
+    public function execute(): ActionResult
     {
         $request = $this->requestStack->getCurrentRequest();
 
