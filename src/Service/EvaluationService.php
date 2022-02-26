@@ -12,10 +12,13 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class EvaluationService
 {
-    public function __construct(private EntityManagerInterface $entityManager)
-    {
-    }
+    public function __construct(
+        private EntityManagerInterface $entityManager
+    ) {}
 
+    /**
+     * @return mixed[]
+     */
     public function getEvaluationData(DateTime $startDate, DateTime $endDate): array
     {
         $data = [];

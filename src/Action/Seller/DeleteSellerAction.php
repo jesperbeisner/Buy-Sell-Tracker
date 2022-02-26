@@ -4,23 +4,28 @@ declare(strict_types=1);
 
 namespace App\Action\Seller;
 
+use App\Action\AbstractAction;
 use App\Action\ActionInterface;
 use App\Entity\Seller;
 use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Security\Core\Security;
 
-final class DeleteSellerAction implements ActionInterface
+final class DeleteSellerAction extends AbstractAction implements ActionInterface
 {
     public function __construct(
-        private RequestStack $requestStack,
+        Security $security,
+        RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-    ) {}
+    ) {
+        parent::__construct($security, $requestStack);
+    }
 
     public function execute(): ActionResult
     {
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $this->getRequest();
 
         if (null === $sellerId = $request->request->get('seller-id')) {
             return new ActionResult(Result::FAILURE, 'Keine Verkäufer-ID angegeben!');

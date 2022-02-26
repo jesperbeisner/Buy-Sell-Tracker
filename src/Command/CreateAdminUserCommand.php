@@ -33,6 +33,7 @@ class CreateAdminUserCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        /** @var string $username */
         $username = $input->getArgument('username');
 
         if (null !== $this->entityManager->getRepository(User::class)->findByUsername($username)) {

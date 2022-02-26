@@ -28,12 +28,15 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     {
         $username = strtolower($username);
 
-        return $this->createQueryBuilder('u')
+        /** @var User|null $result */
+        $result = $this->createQueryBuilder('u')
             ->where('LOWER(u.username) = :username')
             ->setParameter('username', $username)
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        return $result;
     }
 
     /**

@@ -22,9 +22,13 @@ class SaleRepository extends ServiceEntityRepository
         parent::__construct($registry, Sale::class);
     }
 
+    /**
+     * @return array<int, array<string, int|string>>
+     */
     public function findSalesByWeek(DateTime $startDate, DateTime $endDate): array
     {
-        return $this->createQueryBuilder('s')
+        /** @var array<int, array<string, int|string>> $result */
+        $result = $this->createQueryBuilder('s')
             ->select('p.id, p.name, sum(s.amount) as amount, sum(s.blackMoney) as blackMoney, sum(s.realMoney) as realMoney')
             ->innerJoin('s.product', 'p')
             ->andWhere('s.created > :startDate')
@@ -37,5 +41,7 @@ class SaleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+
+        return $result;
     }
 }

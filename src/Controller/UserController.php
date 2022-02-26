@@ -101,6 +101,8 @@ class UserController extends AbstractController
                 return $this->redirectToRoute('role', ['userId' => $user->getId()]);
             }
 
+            $role = (string) $role;
+
             if (!in_array($role, $roles)) {
                 $this->addFlash('error', 'Keine passende Rolle ausgewählt');
                 return $this->redirectToRoute('role', ['userId' => $user->getId()]);

@@ -9,6 +9,9 @@ abstract class Result
     public const FAILURE = 0;
     public const SUCCESS = 1;
 
+    /**
+     * @param mixed[] $data
+     */
     public function __construct(
         private int $result,
         private string $message,
@@ -25,6 +28,9 @@ abstract class Result
         return $this->message;
     }
 
+    /**
+     * @return mixed[]
+     */
     public function getData(): array
     {
         return $this->data;

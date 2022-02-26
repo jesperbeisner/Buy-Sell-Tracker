@@ -20,12 +20,13 @@ class ImageService
     public function getImageSize(): Image
     {
         if (!file_exists($this->mapOriginal)) {
-            throw new Exception('The original GTA-Map disappeared! o.O');
+            throw new Exception('The original Map disappeared! o.O');
         }
 
+        /** @var array<int|string, int|string> $imageSize */
         $imageSize = getimagesize($this->mapOriginal);
 
-        return new Image($imageSize[0], $imageSize[1]);
+        return new Image((int) $imageSize[0], (int) $imageSize[1]);
     }
 
     public function regenerateMap(): void
@@ -71,13 +72,20 @@ class ImageService
             $this->regenerateMap();
         }
 
-        $image = imagecreatefrompng($this->mapEdited);
+        if (false === $image = imagecreatefrompng($this->mapEdited)) {
+            throw new Exception('Could not create image from png!');
+        }
 
+        /** @var int $colorWhite */
         $colorWhite = imagecolorallocate($image, 255, 255, 255);
+        
+        /** @var int $colorBlack */
         $colorBlack = imagecolorallocate($image, 0, 0, 0);
+        
+        /** @var int $colorRed */
         $colorRed = imagecolorallocate($image, 255, 0, 0);
 
-        // Draw 25 pixel to down right
+        // Draw $size pixel to down right
         imageline($image, $xValue, $yValue - 3, $xValue + $size, $yValue - 3 + $size, $colorBlack);
         imageline($image, $xValue, $yValue - 2, $xValue + $size, $yValue - 2 + $size, $colorWhite);
         imageline($image, $xValue, $yValue - 1, $xValue + $size, $yValue - 1 + $size, $colorWhite);
@@ -86,7 +94,7 @@ class ImageService
         imageline($image, $xValue, $yValue + 2, $xValue + $size, $yValue + 2 + $size, $colorWhite);
         imageline($image, $xValue, $yValue + 3, $xValue + $size, $yValue + 3 + $size, $colorBlack);
 
-        // Draw 25 pixel to upper left
+        // Draw $size pixel to upper left
         imageline($image, $xValue, $yValue - 3, $xValue - $size, $yValue - 3 - $size, $colorBlack);
         imageline($image, $xValue, $yValue - 2, $xValue - $size, $yValue - 2 - $size, $colorWhite);
         imageline($image, $xValue, $yValue - 1, $xValue - $size, $yValue - 1 - $size, $colorWhite);
@@ -95,7 +103,7 @@ class ImageService
         imageline($image, $xValue, $yValue + 2, $xValue - $size, $yValue + 2 - $size, $colorWhite);
         imageline($image, $xValue, $yValue + 3, $xValue - $size, $yValue + 3 - $size, $colorBlack);
 
-        // Draw 25 pixel to upper right
+        // Draw $size pixel to upper right
         imageline($image, $xValue, $yValue - 3, $xValue + $size, $yValue - 3 - $size, $colorBlack);
         imageline($image, $xValue, $yValue - 2, $xValue + $size, $yValue - 2 - $size, $colorWhite);
         imageline($image, $xValue, $yValue - 1, $xValue + $size, $yValue - 1 - $size, $colorWhite);
@@ -104,7 +112,7 @@ class ImageService
         imageline($image, $xValue, $yValue + 2, $xValue + $size, $yValue + 2 - $size, $colorWhite);
         imageline($image, $xValue, $yValue + 3, $xValue + $size, $yValue + 3 - $size, $colorBlack);
 
-        // Draw 25 pixel to down left
+        // Draw $size pixel to down left
         imageline($image, $xValue, $yValue - 3, $xValue - $size, $yValue - 3 + $size, $colorBlack);
         imageline($image, $xValue, $yValue - 2, $xValue - $size, $yValue - 2 + $size, $colorWhite);
         imageline($image, $xValue, $yValue - 1, $xValue - $size, $yValue - 1 + $size, $colorWhite);
@@ -113,7 +121,9 @@ class ImageService
         imageline($image, $xValue, $yValue + 2, $xValue - $size, $yValue + 2 + $size, $colorWhite);
         imageline($image, $xValue, $yValue + 3, $xValue - $size, $yValue + 3 + $size, $colorBlack);
 
-        imagepng($image, $this->mapEdited);
+        if (false === imagepng($image, $this->mapEdited)) {
+            throw new Exception('Image could not be saved!');
+        }
 
         $this->createNewMapPositionEntry($xValue, $yValue, $size);
     }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Action\User;
 
+use App\Action\AbstractAction;
 use App\Action\ActionInterface;
 use App\Entity\User;
 use App\Result\ActionResult;
@@ -11,18 +12,22 @@ use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Security\Core\Security;
 
-final class CreateUserAction implements ActionInterface
+final class CreateUserAction extends AbstractAction implements ActionInterface
 {
     public function __construct(
-        private RequestStack $requestStack,
-        private UserPasswordHasherInterface $passwordHasher,
+        Security $security,
+        RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-    ) {}
+        private UserPasswordHasherInterface $passwordHasher,
+    ) {
+        parent::__construct($security, $requestStack);
+    }
 
     public function execute(): ActionResult
     {
-        $request = $this->requestStack->getCurrentRequest();
+        $request = $this->getRequest();
 
         $username = $request->request->get('username');
         $password = $request->request->get('password');
@@ -31,8 +36,11 @@ final class CreateUserAction implements ActionInterface
             return new ActionResult(Result::FAILURE, 'Username und Passwort müssen beide gesetzt sein!');
         }
 
+        $username = (string) $username;
+        $password = (string) $password;
+
         if (strlen($username) < 3 || strlen($username) > 50) {
-            return new ActionResult(Result::FAILURE, 'Der Username muss mindestens 3 und maximal 50 Zeichen lang sein!');
+            return new ActionResult(Result::FAILURE, 'Der Username muss mindestens 2 und darf maximal 50 Zeichen lang sein!');
         }
 
         if (strlen($password) < 8) {

@@ -22,9 +22,13 @@ class EntryRepository extends ServiceEntityRepository
         parent::__construct($registry, Entry::class);
     }
 
+    /**
+     * @return array<int, array<string, int|string>>
+     */
     public function findEntriesByWeek(DateTime $startDate, DateTime $endDate): array
     {
-        return $this->createQueryBuilder('e')
+        /** @var array<int, array<string, int|string>> $result */
+        $result = $this->createQueryBuilder('e')
             ->select('p.id, p.name, sum(e.amount) as amount, sum(e.amount * e.price) as price')
             ->innerJoin('e.product', 'p')
             ->andWhere('e.created > :startDate')
@@ -37,5 +41,7 @@ class EntryRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult()
         ;
+
+        return $result;
     }
 }

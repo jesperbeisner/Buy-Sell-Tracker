@@ -25,11 +25,14 @@ class SellerRepository extends ServiceEntityRepository
     {
         $name = strtolower($name);
 
-        return $this->createQueryBuilder('s')
+        /** @var Seller|null $result */
+        $result = $this->createQueryBuilder('s')
             ->where('LOWER(s.name) = :name')
             ->setParameter('name', $name)
             ->getQuery()
             ->getOneOrNullResult()
         ;
+
+        return $result;
     }
 }

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\MapPosition;
-use Cassandra\Map;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -27,15 +26,20 @@ class MapPositionRepository extends ServiceEntityRepository
         $this->createQueryBuilder('mp')
             ->delete()
             ->getQuery()
-            ->execute();
+            ->execute()
+        ;
     }
 
     public function getLastEntry(): ?MapPosition
     {
-        return $this->createQueryBuilder('mp')
+        /** @var MapPosition|null $result */
+        $result = $this->createQueryBuilder('mp')
             ->orderBy('mp.id', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult();
+            ->getOneOrNullResult()
+        ;
+
+        return $result;
     }
 }

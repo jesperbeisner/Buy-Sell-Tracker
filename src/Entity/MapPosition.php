@@ -63,9 +63,9 @@ class MapPosition
         $this->y = $y;
     }
 
-    public function getSize(): ?int
+    public function getSize(): int
     {
-        return $this->size;
+        return $this->size ?? 10;
     }
 
     public function setSize(?int $size): void
