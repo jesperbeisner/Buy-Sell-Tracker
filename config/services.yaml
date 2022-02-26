@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    app.root-directory: '%kernel.project_dir%'
     app.map-original: '%kernel.project_dir%/public/img/map/map-original.png'
     app.map-edited: '%kernel.project_dir%/public/img/map/map-edited.png'
 
@@ -13,6 +14,7 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
+            $rootDirectory: '%app.root-directory%'
             $mapOriginal: '%app.map-original%'
             $mapEdited: '%app.map-edited%'
 
