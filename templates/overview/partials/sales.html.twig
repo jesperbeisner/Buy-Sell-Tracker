@@ -1,0 +1,58 @@
+{% if sales is empty %}
+    <p class="text-center mt-3">
+        Noch keine Verkäufe vorhanden
+    </p>
+{% else %}
+    <div class="table-responsive">
+        <table class="table text-center mt-3">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Verkäufer</th>
+                <th scope="col">Produkt</th>
+                <th scope="col">Menge</th>
+                <th scope="col">Schwarzgeld</th>
+                <th scope="col">Echtes Geld</th>
+                <th scope="col">Löschen</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set i = 1 %}
+            {% for sale in sales %}
+                <tr id="{{ 'sale-' ~ sale.id }}">
+                    <th scope="row">
+                        {{ i }}
+                    </th>
+                    <td title="{{ sale.created|date("d.m.Y H:i:s") }}">
+                        {{ sale.created|date("d.m.Y") }}
+                    </td>
+                    <td>
+                        {{ sale.name ?? '-' }}
+                    </td>
+                    <td>
+                        {{ sale.product.name }}
+                    </td>
+                    <td>
+                        {{ sale.amount }}
+                    </td>
+                    <td>
+                        ${{ sale.blackMoney|number_format(0, ',', '.') }}
+                    </td>
+                    <td>
+                        ${{ sale.realMoney|number_format(0, ',', '.') }}
+                    </td>
+                    <td>
+                        <i
+                                class="fa-solid fa-trash click-icon delete-icon text-danger"
+                                data-delete-url="{{ path('delete-sale', { id: sale.id }) }}"
+                                data-row-id="{{ 'sale-' ~ sale.id }}"
+                        ></i>
+                    </td>
+                </tr>
+                {% set i = i + 1 %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}

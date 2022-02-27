@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-abstract class AbstractAction
+abstract class AbstractAction implements ActionInterface
 {
     public function __construct(
         protected Security $security,

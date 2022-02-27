@@ -1,0 +1,66 @@
+{% if purchases is empty %}
+    <p class="text-center mt-3">
+        Noch keine Käufe vorhanden
+    </p>
+{% else %}
+    <div class="table-responsive">
+        <table class="table text-center mt-3">
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Datum</th>
+                <th scope="col">Schicht</th>
+                <th scope="col">Verkäufer</th>
+                <th scope="col">Käufer</th>
+                <th scope="col">Produkt</th>
+                <th scope="col">Menge</th>
+                <th scope="col">Preis/Stück</th>
+                <th scope="col">Gesamtkosten</th>
+                <th scope="col">Löschen</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set i = 1 %}
+            {% for purchase in purchases %}
+                <tr id="{{ 'purchase-' ~ purchase.id }}">
+                    <th scope="row">
+                        {{ i }}
+                    </th>
+                    <td title="{{ purchase.created|date("d.m.Y H:i:s") }}">
+                        {{ purchase.created|date("d.m.Y") }}
+                    </td>
+                    <td>
+                        {{ purchase.shift.time }}
+                    </td>
+                    <td>
+                        {{ purchase.seller.name }}
+                    </td>
+                    <td>
+                        {{ purchase.name ?? '-' }}
+                    </td>
+                    <td>
+                        {{ purchase.product.name }}
+                    </td>
+                    <td>
+                        {{ purchase.amount }}
+                    </td>
+                    <td>
+                        ${{ purchase.price|number_format(0, ',', '.') }}
+                    </td>
+                    <td>
+                        ${{ (purchase.amount * purchase.price)|number_format(0, ',', '.') }}
+                    </td>
+                    <td>
+                        <i
+                                class="fa-solid fa-trash click-icon delete-icon text-danger"
+                                data-delete-url="{{ path('delete-purchase', { id: purchase.id }) }}"
+                                data-row-id="{{ 'purchase-' ~ purchase.id }}"
+                        ></i>
+                    </td>
+                </tr>
+                {% set i = i + 1 %}
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endif %}

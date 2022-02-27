@@ -27,45 +27,6 @@ class IndexController extends AbstractController
         return $this->render('index/index.html.twig');
     }
 
-    #[Route('/overview', name: 'overview')]
-    public function overview(Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
-
-        if ($request->isMethod('POST')) {
-            $actionName = $request->request->get('action');
-
-            if ($actionName === 'buy') {
-                $entryId = (int)$request->request->get('entry-id');
-                $entry = $entityManager->getRepository(Entry::class)->find($entryId);
-
-                if ($entry !== null) {
-                    $entityManager->remove($entry);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Der Eintrag wurde erfolgreich gelöscht');
-                }
-            }
-
-            if ($actionName === 'sell') {
-                $saleId = (int)$request->request->get('sale-id');
-                $sale = $entityManager->getRepository(Sale::class)->find($saleId);
-
-                if ($sale !== null) {
-                    $entityManager->remove($sale);
-                    $entityManager->flush();
-                    $this->addFlash('success', 'Der Eintrag wurde erfolgreich gelöscht');
-                }
-            }
-
-            return $this->redirectToRoute('overview');
-        }
-
-        return $this->render('index/overview.html.twig', [
-            'entries' => $entityManager->getRepository(Entry::class)->findBy([], ['created' => 'DESC']),
-            'sales' => $entityManager->getRepository(Sale::class)->findBy([], ['created' => 'DESC']),
-        ]);
-    }
-
     #[Route('/add', name: 'add')]
     public function add(Request $request, EntityManagerInterface $entityManager): Response
     {
