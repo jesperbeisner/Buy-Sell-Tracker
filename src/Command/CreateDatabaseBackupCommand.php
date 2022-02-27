@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Notifier\DiscordNotifier;
 use DateTime;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface;
 
 #[AsCommand(name: 'app:create-database-backup', description: 'Creates a database backup and deletes old backups')]
 class CreateDatabaseBackupCommand extends Command
 {
     public function __construct(
-        private string $rootDirectory
+        private ContainerBagInterface $containerBag,
+        private DiscordNotifier $discordNotifier,
     ) {
         parent::__construct();
     }
@@ -24,7 +27,7 @@ class CreateDatabaseBackupCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $varDir = $this->rootDirectory . '/var';
+        $varDir = $this->containerBag->get('kernel.project_dir') . '/var';
         $backupDir = $varDir . '/backup';
 
         if (!is_dir($varDir)) {
@@ -49,13 +52,27 @@ class CreateDatabaseBackupCommand extends Command
 
         $io->success('Database backup was successfully created!');
 
+        $this->discordNotifier->send(
+            "Database backup created",
+            "Database backup was successfully created",
+            DiscordNotifier::COLOR_GREEN
+        );
+
         $threeDaysTime = 60 * 60 * 24 * 3;
+
+        /** @var string[] $backupFiles */
         $backupFiles = glob($backupDir . '/' . '*_data.db');
         foreach ($backupFiles as $backupFile) {
             $fileTime = filemtime($backupFile);
             if (time() - $fileTime > $threeDaysTime) {
                 unlink($backupFile);
                 $io->info("Old database backup '$backupFile' was successfully removed.");
+
+                $this->discordNotifier->send(
+                    "Database backup deleted",
+                    "Old database backup '$backupFile' was successfully deleted",
+                    DiscordNotifier::COLOR_GREEN
+                );
             }
         }
 

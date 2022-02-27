@@ -7,6 +7,7 @@ namespace App\Action\User;
 use App\Action\AbstractAction;
 use App\Action\ActionInterface;
 use App\Entity\User;
+use App\Notifier\DiscordNotifier;
 use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,10 +20,11 @@ final class CreateUserAction extends AbstractAction implements ActionInterface
     public function __construct(
         Security $security,
         RequestStack $requestStack,
+        DiscordNotifier $discordNotifier,
         private EntityManagerInterface $entityManager,
         private UserPasswordHasherInterface $passwordHasher,
     ) {
-        parent::__construct($security, $requestStack);
+        parent::__construct($security, $requestStack, $discordNotifier);
     }
 
     public function execute(): ActionResult
@@ -58,6 +60,12 @@ final class CreateUserAction extends AbstractAction implements ActionInterface
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
+        $this->discordNotifier->send(
+            "User created",
+            "The new user '{$user->getUsername()}' was successfully created",
+            DiscordNotifier::COLOR_GREEN
+        );
 
         return new ActionResult(Result::SUCCESS, 'Der User wurde erfolgreich angelegt!');
     }

@@ -6,6 +6,7 @@ namespace App\Action\User;
 
 use App\Action\AbstractAction;
 use App\Action\ActionInterface;
+use App\Notifier\DiscordNotifier;
 use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,10 +19,11 @@ final class ChangePasswordAction extends AbstractAction implements ActionInterfa
     public function __construct(
         Security $security,
         RequestStack $requestStack,
+        DiscordNotifier $discordNotifier,
         private EntityManagerInterface $entityManager,
         private UserPasswordHasherInterface $passwordHasher,
     ) {
-        parent::__construct($security, $requestStack);
+        parent::__construct($security, $requestStack, $discordNotifier);
     }
 
     public function execute(): ActionResult
@@ -49,6 +51,12 @@ final class ChangePasswordAction extends AbstractAction implements ActionInterfa
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
+        $this->discordNotifier->send(
+            "Password changed",
+            "The user has successfully changed his password",
+            DiscordNotifier::COLOR_GREEN
+        );
 
         return new ActionResult(Result::SUCCESS, 'Das Passwort wurde erfolgreich geändert!');
     }

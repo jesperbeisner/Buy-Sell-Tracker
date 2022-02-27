@@ -7,6 +7,7 @@ namespace App\Action\Seller;
 use App\Action\AbstractAction;
 use App\Action\ActionInterface;
 use App\Entity\Seller;
+use App\Notifier\DiscordNotifier;
 use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,9 +19,10 @@ final class DeleteSellerAction extends AbstractAction implements ActionInterface
     public function __construct(
         Security $security,
         RequestStack $requestStack,
+        DiscordNotifier $discordNotifier,
         private EntityManagerInterface $entityManager,
     ) {
-        parent::__construct($security, $requestStack);
+        parent::__construct($security, $requestStack, $discordNotifier);
     }
 
     public function execute(): ActionResult
@@ -39,11 +41,19 @@ final class DeleteSellerAction extends AbstractAction implements ActionInterface
             return new ActionResult(Result::FAILURE, 'Dieser Verkäufer ist bereits gelöscht!');
         }
 
+        $oldSellerName = $seller->getName();
+
         $seller->delete();
         $seller->setName($seller->getName() . '_deleted_' . time());
 
         $this->entityManager->persist($seller);
         $this->entityManager->flush();
+
+        $this->discordNotifier->send(
+            "Seller deleted",
+            "Seller '$oldSellerName' was successfully deleted",
+            DiscordNotifier::COLOR_RED
+        );
 
         return new ActionResult(Result::SUCCESS, 'Der Verkäufer wurde erfolgreich gelöscht!');
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Action;
 
 use App\Entity\User;
+use App\Notifier\DiscordNotifier;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -15,6 +16,7 @@ abstract class AbstractAction
     public function __construct(
         protected Security $security,
         protected RequestStack $requestStack,
+        protected DiscordNotifier $discordNotifier,
     ) {}
 
     protected function getUser(): User

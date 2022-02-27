@@ -7,6 +7,7 @@ namespace App\Action\User;
 use App\Action\AbstractAction;
 use App\Action\ActionInterface;
 use App\Entity\User;
+use App\Notifier\DiscordNotifier;
 use App\Result\ActionResult;
 use App\Result\Result;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,9 +19,10 @@ final class DeleteUserAction extends AbstractAction implements ActionInterface
     public function __construct(
         Security $security,
         RequestStack $requestStack,
+        DiscordNotifier $discordNotifier,
         private EntityManagerInterface $entityManager,
     ) {
-        parent::__construct($security, $requestStack);
+        parent::__construct($security, $requestStack, $discordNotifier);
     }
 
     public function execute(): ActionResult
@@ -42,6 +44,12 @@ final class DeleteUserAction extends AbstractAction implements ActionInterface
 
         $this->entityManager->remove($deleteUser);
         $this->entityManager->flush();
+
+        $this->discordNotifier->send(
+            "User deleted",
+            "The user '{$deleteUser->getUsername()}' was successfully deleted",
+            DiscordNotifier::COLOR_RED
+        );
 
         return new ActionResult(Result::SUCCESS, 'Der User wurde erfolgreich gelöscht!');
     }
