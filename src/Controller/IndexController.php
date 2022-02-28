@@ -14,6 +14,7 @@ use App\Service\EvaluationService;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -22,9 +23,13 @@ use Symfony\Component\Routing\Annotation\Route;
 class IndexController extends AbstractController
 {
     #[Route('/', name: 'index')]
-    public function index(): Response
+    public function index(ParameterBagInterface $parameterBag): Response
     {
-        return $this->render('index/index.html.twig');
+        $indexImage = $parameterBag->get('app.index-image');
+
+        return $this->render('index/index.html.twig', [
+            'picture' => 'Placeholder' === $indexImage ? 'placeholder.png' : $indexImage,
+        ]);
     }
 
     #[Route('/add', name: 'add')]
@@ -85,7 +90,7 @@ class IndexController extends AbstractController
         }
 
         if ($week === 0) {
-            $week = (int)(new DateTime())->format('W');
+            $week = (int) (new DateTime())->format('W');
             return $this->redirectToRoute('evaluation', ['week' => $week]);
         }
 

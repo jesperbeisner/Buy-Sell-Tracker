@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Peaky Blinders{% endblock %}</title>
+    <title>{% block title %}{{ app.request.server.get('APP_NAME') }}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" type="image/png" href="{{ asset('img/favicon.png') }}" sizes="16x16">
 
@@ -12,9 +12,7 @@
         <link href="{{ asset('css/style.css') }}" rel="stylesheet"/>
     {% endblock %}
 
-    {% block javascript_top %}
-        <script defer src="{{ asset('js/alpinejs-3.9.0.min.js') }}"></script>
-    {% endblock %}
+    {% block javascript_top %}{% endblock %}
 </head>
 <body>
     {% include 'layout/navigation.html.twig' %}
