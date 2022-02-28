@@ -3,7 +3,11 @@
         Noch keine Verkäufe vorhanden
     </p>
 {% else %}
-    <div class="table-responsive">
+    <p class="text-center mt-3 d-none" id="no-sales-text">
+        Noch keine Verkäufe vorhanden
+    </p>
+
+    <div class="table-responsive" id="sales-table">
         <table class="table text-center mt-3">
             <thead>
             <tr>
@@ -17,7 +21,7 @@
                 <th scope="col">Löschen</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="sales-table-body">
             {% set i = 1 %}
             {% for sale in sales %}
                 <tr id="{{ 'sale-' ~ sale.id }}">
@@ -45,6 +49,7 @@
                     <td>
                         <i
                                 class="fa-solid fa-trash click-icon delete-icon text-danger"
+                                data-entry-type="sale"
                                 data-delete-url="{{ path('delete-sale', { id: sale.id }) }}"
                                 data-row-id="{{ 'sale-' ~ sale.id }}"
                         ></i>

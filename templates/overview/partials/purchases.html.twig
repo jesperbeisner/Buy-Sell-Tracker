@@ -3,7 +3,11 @@
         Noch keine Käufe vorhanden
     </p>
 {% else %}
-    <div class="table-responsive">
+    <p class="text-center mt-3 d-none" id="no-purchases-text">
+        Noch keine Käufe vorhanden
+    </p>
+
+    <div class="table-responsive" id="purchases-table">
         <table class="table text-center mt-3">
             <thead>
             <tr>
@@ -19,7 +23,7 @@
                 <th scope="col">Löschen</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="purchases-table-body">
             {% set i = 1 %}
             {% for purchase in purchases %}
                 <tr id="{{ 'purchase-' ~ purchase.id }}">
@@ -33,7 +37,11 @@
                         {{ purchase.shift.time }}
                     </td>
                     <td>
-                        {{ purchase.seller.name }}
+                        {% if '_deleted_' in purchase.seller.name  %}
+                            Gelöscht
+                        {% else %}
+                            {{ purchase.seller.name }}
+                        {% endif %}
                     </td>
                     <td>
                         {{ purchase.name ?? '-' }}
@@ -53,6 +61,7 @@
                     <td>
                         <i
                                 class="fa-solid fa-trash click-icon delete-icon text-danger"
+                                data-entry-type="purchase"
                                 data-delete-url="{{ path('delete-purchase', { id: purchase.id }) }}"
                                 data-row-id="{{ 'purchase-' ~ purchase.id }}"
                         ></i>
