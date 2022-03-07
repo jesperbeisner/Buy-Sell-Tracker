@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace App\Service;
 
 use DateTime;
-use DateTimeZone;
 
 class DateService
 {
     /**
-     * @param int $weekNumber
      * @return array<DateTime>
      */
     public function getStartAndEndOfWeekFromWeekNumber(int $weekNumber): array
     {
-        $startDate = new DateTime('now', new DateTimeZone('Europe/Berlin'));
+        $startDate = new DateTime('now');
         $startDate->setISODate(2022, $weekNumber);
         $startDate->setTime(0, 0, 0);
 

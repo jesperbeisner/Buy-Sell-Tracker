@@ -44,8 +44,6 @@ class SaleType extends AbstractType
                 'class' => Product::class,
                 'query_builder' => function (ProductRepository $repository) {
                     return $repository->createQueryBuilder('p')
-                        ->where('p.deleted = :bool')
-                        ->setParameter('bool', false)
                         ->orderBy('p.name', 'ASC');
                 },
                 'choice_label' => 'name',

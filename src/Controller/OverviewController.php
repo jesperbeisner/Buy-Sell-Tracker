@@ -6,7 +6,7 @@ namespace App\Controller;
 
 use App\Action\Purchase\DeletePurchaseAction;
 use App\Action\Sale\DeleteSaleAction;
-use App\Entity\Entry;
+use App\Entity\Purchase;
 use App\Entity\Sale;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,8 +21,8 @@ class OverviewController extends AbstractController
     {
         $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
 
-        return $this->render('overview/overview.html.twig', [
-            'purchases' => $entityManager->getRepository(Entry::class)->findBy([], ['created' => 'DESC']),
+        return $this->render('overview/index.html.twig', [
+            'purchases' => $entityManager->getRepository(Purchase::class)->findBy([], ['created' => 'DESC']),
             'sales' => $entityManager->getRepository(Sale::class)->findBy([], ['created' => 'DESC']),
         ]);
     }

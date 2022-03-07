@@ -32,10 +32,10 @@
                         {{ sale.created|date("d.m.Y") }}
                     </td>
                     <td>
-                        {{ sale.name ?? '-' }}
+                        {{ sale.name }}
                     </td>
                     <td>
-                        {{ sale.product.name }}
+                        {{ sale.product.name ?? '-' }}
                     </td>
                     <td>
                         {{ sale.amount }}

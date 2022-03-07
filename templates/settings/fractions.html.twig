@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-3 mb-3">
+        <div class="row">
+            <div class="col">
+                <h1 class="page-title">Fraktionen</h1>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Hinzufügen
+                        </h5>
+
+                        <form method="POST" class="mt-3">
+                            <div class="mb-3">
+                                <label for="fraction" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="fraction" name="fraction">
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="action" value="add">
+                                Speichern
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <h5 class="card-title mb-2">
+                            Übersicht
+                        </h5>
+
+                        {% if fractions is not empty %}
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th scope="col" class="text-center">#</th>
+                                    <th scope="col">Fraktion</th>
+                                    <th scope="col" class="text-center">Löschen</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% set i = 1 %}
+                                {% for fraction in fractions %}
+                                    <tr>
+                                        <th scope="row" style="width: 10%" class="text-center">{{ i }}</th>
+                                        <td style="width: 80%">{{ fraction.name }}</td>
+                                        <td class="delete-seller text-center" style="width: 10%">
+                                            <i class="fa-solid fa-trash click-icon delete-icon text-danger" data-fraction-id="{{ fraction.id }}"></i>
+                                        </td>
+                                    </tr>
+                                    {% set i = i + 1 %}
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p class="text-center">
+                                Noch keine Fraktion vorhanden. Du musst zuerst eine anlegen.
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form method="POST" class="d-none">
+            <input type="hidden" name="fraction-id" value="0" id="fraction-id-input">
+            <input type="submit" name="action" value="delete" id="submit-input">
+        </form>
+
+    </div>
+{% endblock %}
+
+{% block javascript_bot %}
+    {{ parent() }}
+
+    <script>
+      document.querySelectorAll('.delete-icon').forEach((icon) => {
+        icon.addEventListener('click', () => {
+          document.getElementById('fraction-id-input').value = icon.dataset.fractionId;
+          document.getElementById('submit-input').click();
+        });
+      });
+    </script>
+{% endblock %}

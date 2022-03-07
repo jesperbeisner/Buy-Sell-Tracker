@@ -2,12 +2,12 @@
 
 namespace App\Form;
 
-use App\Entity\Entry;
+use App\Entity\Purchase;
 use App\Entity\Product;
-use App\Entity\Seller;
+use App\Entity\Fraction;
 use App\Entity\Shift;
 use App\Repository\ProductRepository;
-use App\Repository\SellerRepository;
+use App\Repository\FractionRepository;
 use App\Repository\ShiftRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -18,7 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class EntryType extends AbstractType
+class PurchaseType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -42,12 +42,7 @@ class EntryType extends AbstractType
             ->add('shift', EntityType::class, [
                 'label' => 'Schicht',
                 'class' => Shift::class,
-                'query_builder' => function (ShiftRepository $repository) {
-                    return $repository->createQueryBuilder('s')
-                        ->where('s.deleted = :bool')
-                        ->setParameter('bool', false);
-                },
-                'choice_label' => 'time',
+                'choice_label' => 'name',
                 'attr' => ['class' => 'form-control']
             ])
             ->add('product', EntityType::class, [
@@ -55,20 +50,16 @@ class EntryType extends AbstractType
                 'class' => Product::class,
                 'query_builder' => function (ProductRepository $repository) {
                     return $repository->createQueryBuilder('p')
-                        ->where('p.deleted = :bool')
-                        ->setParameter('bool', false)
                         ->orderBy('p.name', 'ASC');
                 },
                 'choice_label' => 'name',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('seller', EntityType::class, [
+            ->add('fraction', EntityType::class, [
                 'label' => 'Verkäufer',
-                'class' => Seller::class,
-                'query_builder' => function (SellerRepository $repository) {
+                'class' => Fraction::class,
+                'query_builder' => function (FractionRepository $repository) {
                     return $repository->createQueryBuilder('s')
-                        ->where('s.deleted = :bool')
-                        ->setParameter('bool', false)
                         ->orderBy('s.name', 'ASC');
                 },
                 'choice_label' => 'name',
@@ -84,7 +75,7 @@ class EntryType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Entry::class,
+            'data_class' => Purchase::class,
         ]);
     }
 }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Repository\ProductRepository;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -15,20 +16,20 @@ class Product
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'string')]
     private string $name;
 
-    #[ORM\Column(type: 'boolean')]
-    private bool $deleted = false;
+    #[ORM\Column(type: 'datetime')]
+    private DateTime $created;
+
+    public function __construct()
+    {
+        $this->created = new DateTime();
+    }
 
     public function getId(): int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): void
-    {
-        $this->id = $id;
     }
 
     public function getName(): string
@@ -41,18 +42,13 @@ class Product
         $this->name = $name;
     }
 
-    public function isDeleted(): bool
+    public function getCreated(): DateTime
     {
-        return $this->deleted;
+        return $this->created;
     }
 
-    public function setDeleted(bool $deleted): void
+    public function setCreated(DateTime $created): void
     {
-        $this->deleted = $deleted;
-    }
-
-    public function delete(): void
-    {
-        $this->deleted = true;
+        $this->created = $created;
     }
 }

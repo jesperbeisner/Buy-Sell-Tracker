@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Entity\Entry;
+use App\Entity\Purchase;
 use App\Entity\Product;
 use App\Entity\Sale;
 use DateTime;
@@ -22,9 +22,7 @@ class EvaluationService
     public function getEvaluationData(DateTime $startDate, DateTime $endDate): array
     {
         $data = [];
-
-        $productRepository = $this->entityManager->getRepository(Product::class);
-        $products = $productRepository->findBy(['deleted' => false], ['name' => 'ASC']);
+        $products = $this->entityManager->getRepository(Product::class)->findAllOrderedByName();
 
         foreach ($products as $product) {
             $data[$product->getId()] = [
@@ -35,7 +33,7 @@ class EvaluationService
             ];
         }
 
-        $purchases = $this->entityManager->getRepository(Entry::class)->findEntriesByWeek($startDate, $endDate);
+        $purchases = $this->entityManager->getRepository(Purchase::class)->findEntriesByWeek($startDate, $endDate);
         $sales = $this->entityManager->getRepository(Sale::class)->findSalesByWeek($startDate, $endDate);
 
         foreach ($purchases as $purchase) {

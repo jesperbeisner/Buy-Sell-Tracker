@@ -38,13 +38,21 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-bs-toggle="dropdown" aria-expanded="false">Einstellungen</a>
                         <ul class="dropdown-menu" aria-labelledby="dropdown">
+                            {% if is_granted('ROLE_SUPER_USER') %}
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('fractions') }}">Fraktionen</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('products') }}">Produkte</a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ path('shifts') }}">Schichten</a>
+                                </li>
+                            {% endif %}
                             {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                 <li>
                                     <a class="dropdown-item" href="{{ path('change-password') }}">Passwort ändern</a>
                                 </li>
-                            {% endif %}
-                            {% if is_granted('ROLE_SUPER_USER') %}
-                                <li><a class="dropdown-item" href="{{ path('seller') }}">Verkäufer bearbeiten</a></li>
                             {% endif %}
                         </ul>
                     </li>

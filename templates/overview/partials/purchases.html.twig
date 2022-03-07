@@ -14,7 +14,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Datum</th>
                 <th scope="col">Schicht</th>
-                <th scope="col">Verkäufer</th>
+                <th scope="col">Fraktion</th>
                 <th scope="col">Käufer</th>
                 <th scope="col">Produkt</th>
                 <th scope="col">Menge</th>
@@ -34,20 +34,16 @@
                         {{ purchase.created|date("d.m.Y") }}
                     </td>
                     <td>
-                        {{ purchase.shift.time }}
+                        {{ purchase.shift.name ?? '-' }}
                     </td>
                     <td>
-                        {% if '_deleted_' in purchase.seller.name  %}
-                            Gelöscht
-                        {% else %}
-                            {{ purchase.seller.name }}
-                        {% endif %}
+                        {{ purchase.fraction.name ?? '-' }}
                     </td>
                     <td>
-                        {{ purchase.name ?? '-' }}
+                        {{ purchase.name }}
                     </td>
                     <td>
-                        {{ purchase.product.name }}
+                        {{ purchase.product.name ?? '-' }}
                     </td>
                     <td>
                         {{ purchase.amount }}

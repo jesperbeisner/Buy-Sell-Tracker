@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Action\Purchase;
 
 use App\Action\AbstractAction;
-use App\Entity\Entry;
+use App\Entity\Purchase;
 use App\Notifier\DiscordNotifier;
 use App\Result\ActionResult;
 use App\Result\Result;
@@ -33,21 +33,27 @@ final class DeletePurchaseAction extends AbstractAction
             throw new Exception('Id in DeletePurchaseAction can not be null. Did you forget to set the id before calling execute?');
         }
 
-        if (null === $purchase = $this->entityManager->getRepository(Entry::class)->find($this->id)) {
+        if (null === $purchase = $this->entityManager->getRepository(Purchase::class)->find($this->id)) {
             return new ActionResult(Result::FAILURE, 'No purchase found with this id', ['code' => 404]);
         }
 
         $shift = $purchase->getShift();
+        $shiftName = $shift === null ? '-' : $shift->getName();
+
         $product = $purchase->getProduct();
-        $seller = $purchase->getSeller();
-        $username = $purchase->getName() ?? 'Unknown';
+        $productName = $product === null ? '-' : $product->getName();
+
+        $fraction = $purchase->getFraction();
+        $fractionName = $fraction === null ? '-' : $fraction->getName();
+
+        $username = $purchase->getName();
 
         $this->entityManager->remove($purchase);
         $this->entityManager->flush();
 
         $discordNotifierMessage = "The purchase was successfully deleted." . PHP_EOL . PHP_EOL;
         $discordNotifierMessage .= "Amount: {$purchase->getAmount()}; Price: {$purchase->getPrice()}; ";
-        $discordNotifierMessage .= "Shift: {$shift->getTime()}; Product: {$product->getName()}; Seller: {$seller->getName()}; ";
+        $discordNotifierMessage .= "Shift: $shiftName; Product: $productName; Fraction: $fractionName; ";
         $discordNotifierMessage .= "User: $username; Created: {$purchase->getCreated()->format('d.m.Y - H:i:s')}";
 
         $this->discordNotifier->send(

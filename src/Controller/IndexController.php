@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Entry;
+use App\Entity\Fraction;
+use App\Entity\Product;
+use App\Entity\Purchase;
 use App\Entity\Sale;
+use App\Entity\Shift;
 use App\Entity\User;
-use App\Form\EntryType;
+use App\Form\PurchaseType;
 use App\Form\SaleType;
 use App\Service\DateService;
 use App\Service\EvaluationService;
@@ -40,30 +43,30 @@ class IndexController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
-        $buyForm = $this->createForm(EntryType::class);
-        $buyForm->setData(new Entry());
-        $buyForm->handleRequest($request);
+        $purchaseForm = $this->createForm(PurchaseType::class);
+        $purchaseForm->setData(new Purchase());
+        $purchaseForm->handleRequest($request);
 
-        if ($buyForm->isSubmitted() && $buyForm->isValid()) {
-            /** @var Entry $entry */
-            $entry = $buyForm->getViewData();
-            $entry->updateTime();
-            $entry->setName($user->getUsername());
+        if ($purchaseForm->isSubmitted() && $purchaseForm->isValid()) {
+            /** @var Purchase $purchase */
+            $purchase = $purchaseForm->getViewData();
+            $purchase->updateTime();
+            $purchase->setName($user->getUsername());
 
-            $entityManager->persist($entry);
+            $entityManager->persist($purchase);
             $entityManager->flush();
 
             $this->addFlash('success', 'Der Eintrag wurde erfolgreich hinzugefügt');
             return $this->redirectToRoute('add');
         }
 
-        $sellForm = $this->createForm(SaleType::class);
-        $sellForm->setData(new Sale());
-        $sellForm->handleRequest($request);
+        $saleForm = $this->createForm(SaleType::class);
+        $saleForm->setData(new Sale());
+        $saleForm->handleRequest($request);
 
-        if ($sellForm->isSubmitted() && $sellForm->isValid()) {
+        if ($saleForm->isSubmitted() && $saleForm->isValid()) {
             /** @var Sale $sale */
-            $sale = $sellForm->getViewData();
+            $sale = $saleForm->getViewData();
             $sale->updateTime();
             $sale->setName($user->getUsername());
 
@@ -75,32 +78,11 @@ class IndexController extends AbstractController
         }
 
         return $this->render('index/add.html.twig', [
-            'form' => $buyForm->createView(),
-            'sellForm' => $sellForm->createView(),
-        ]);
-    }
-
-    #[Route('/evaluation/{week}', name: 'evaluation', requirements: ['week' => '\d{1,2}'], defaults: ['week' => 0])]
-    public function evaluation(int $week, DateService $dateService, EvaluationService $evaluationService): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_SUPER_USER');
-
-        if ($week > 52) {
-            throw new NotFoundHttpException();
-        }
-
-        if ($week === 0) {
-            $week = (int) (new DateTime())->format('W');
-            return $this->redirectToRoute('evaluation', ['week' => $week]);
-        }
-
-        [$startDate, $endDate] = $dateService->getStartAndEndOfWeekFromWeekNumber($week);
-
-        return $this->render('index/evaluation.html.twig', [
-            'evaluationData' => $evaluationService->getEvaluationData($startDate, $endDate),
-            'startDate' => $startDate,
-            'endDate' => $endDate,
-            'week' => $week,
+            'purchaseForm' => $purchaseForm->createView(),
+            'saleForm' => $saleForm->createView(),
+            'shifts' => $entityManager->getRepository(Shift::class)->findAll(),
+            'products' => $entityManager->getRepository(Product::class)->findAll(),
+            'fractions' => $entityManager->getRepository(Fraction::class)->findAll(),
         ]);
     }
 }

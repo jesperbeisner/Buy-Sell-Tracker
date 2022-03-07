@@ -28,16 +28,14 @@ class SaleRepository extends ServiceEntityRepository
     public function findSalesByWeek(DateTime $startDate, DateTime $endDate): array
     {
         /** @var array<int, array<string, int|string>> $result */
-        $result = $this->createQueryBuilder('s')
-            ->select('p.id, p.name, sum(s.amount) as amount, sum(s.blackMoney) as blackMoney, sum(s.realMoney) as realMoney')
-            ->innerJoin('s.product', 'p')
-            ->andWhere('s.created > :startDate')
-            ->andWhere('s.created < :endDate')
-            ->andWhere('p.deleted = :status')
+        $result = $this->createQueryBuilder('sale')
+            ->select('product.id, product.name, sum(sale.amount) as amount, sum(sale.blackMoney) as blackMoney, sum(sale.realMoney) as realMoney')
+            ->innerJoin('sale.product', 'product')
+            ->andWhere('sale.created > :startDate')
+            ->andWhere('sale.created < :endDate')
             ->setParameter('startDate', $startDate)
             ->setParameter('endDate', $endDate)
-            ->setParameter('status', false)
-            ->groupBy('p.id')
+            ->groupBy('product.id')
             ->getQuery()
             ->getResult()
         ;

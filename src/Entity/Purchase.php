@@ -4,33 +4,36 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
-use App\Repository\SaleRepository;
+use App\Repository\PurchaseRepository;
 use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SaleRepository::class)]
-#[ORM\Index(fields: ['created'], name: 'sale_created_index')]
-class Sale
+#[ORM\Entity(repositoryClass: PurchaseRepository::class)]
+#[ORM\Index(fields: ['created'], name: 'purchase_created_index')]
+class Purchase
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private int $id;
 
-    #[ORM\Column(type: 'string')]
-    private string $name;
-
     #[ORM\Column(type: 'integer')]
     private int $amount;
 
     #[ORM\Column(type: 'integer')]
-    private int $blackMoney;
+    private int $price;
 
-    #[ORM\Column(type: 'integer')]
-    private int $realMoney;
+    #[ORM\Column(type: 'string')]
+    private string $name;
+
+    #[ORM\ManyToOne(targetEntity: Shift::class)]
+    private ?Shift $shift;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
-    private Product $product;
+    private ?Product $product;
+
+    #[ORM\ManyToOne(targetEntity: Fraction::class)]
+    private ?Fraction $fraction;
 
     #[ORM\Column(type: 'datetime')]
     private DateTime $created;
@@ -56,14 +59,9 @@ class Sale
         return $this->id;
     }
 
-    public function getName(): string
+    public function setId(int $id): void
     {
-        return $this->name;
-    }
-
-    public function setName(string $name): void
-    {
-        $this->name = $name;
+        $this->id = $id;
     }
 
     public function getAmount(): int
@@ -76,34 +74,54 @@ class Sale
         $this->amount = $amount;
     }
 
-    public function getBlackMoney(): int
+    public function getPrice(): int
     {
-        return $this->blackMoney;
+        return $this->price;
     }
 
-    public function setBlackMoney(int $blackMoney): void
+    public function setPrice(int $price): void
     {
-        $this->blackMoney = $blackMoney;
+        $this->price = $price;
     }
 
-    public function getRealMoney(): int
+    public function getName(): string
     {
-        return $this->realMoney;
+        return $this->name;
     }
 
-    public function setRealMoney(int $realMoney): void
+    public function setName(string $name): void
     {
-        $this->realMoney = $realMoney;
+        $this->name = $name;
     }
 
-    public function getProduct(): Product
+    public function getShift(): ?Shift
+    {
+        return $this->shift;
+    }
+
+    public function setShift(?Shift $shift): void
+    {
+        $this->shift = $shift;
+    }
+
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setProduct(Product $product): void
+    public function setProduct(?Product $product): void
     {
         $this->product = $product;
+    }
+
+    public function getFraction(): ?Fraction
+    {
+        return $this->fraction;
+    }
+
+    public function setFraction(?Fraction $fraction): void
+    {
+        $this->fraction = $fraction;
     }
 
     public function getCreated(): DateTime

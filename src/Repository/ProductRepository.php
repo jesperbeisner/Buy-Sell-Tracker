@@ -20,4 +20,33 @@ class ProductRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Product::class);
     }
+
+    public function findByName(string $name): ?Product
+    {
+        $name = strtolower($name);
+
+        /** @var Product|null $result */
+        $result = $this->createQueryBuilder('product')
+            ->where('LOWER(product.name) = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result;
+    }
+
+    /**
+     * @return Product[]
+     */
+    public function findAllOrderedByName(): array
+    {
+        /** @var Product[] $result */
+        $result = $this->createQueryBuilder('product')
+            ->orderBy('product.name', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return $result;
+    }
 }

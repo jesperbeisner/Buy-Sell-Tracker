@@ -7,114 +7,126 @@
                 <h1 class="page-title">Eintrag hinzufügen</h1>
             </div>
         </div>
-
         <div class="row mt-2">
             <div class="col">
                 <div class="card card-blue">
                     <div class="card-body">
-                        <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link active" id="buy-tab" data-bs-toggle="tab" data-bs-target="#buy" type="button" role="tab" aria-controls="buy" aria-selected="true">
-                                    Kauf
-                                </button>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <button class="nav-link" id="sell-tab" data-bs-toggle="tab" data-bs-target="#sell" type="button" role="tab" aria-controls="sell" aria-selected="false">
-                                    Verkauf
-                                </button>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="buy" role="tabpanel" aria-labelledby="buy-tab">
-                                {{ form_start(form) }}
+                        {% if (shifts|length == 0) or (products|length == 0) or (fractions|length == 0) %}
+                            <p class="text-center fw-bold mt-3">
+                                Es muss mindestens jeweils eine <a href="{{ path('shifts') }}">Schicht</a>, ein <a
+                                        href="{{ path('products') }}">Produkt</a> und eine <a
+                                        href="{{ path('fractions') }}">Fraktion</a> angelegt sein,
+                                bevor du Einträge hinzufügen kannst.
+                            </p>
+                        {% else %}
+                            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link active" id="buy-tab" data-bs-toggle="tab"
+                                            data-bs-target="#buy" type="button" role="tab" aria-controls="buy"
+                                            aria-selected="true">
+                                        Kauf
+                                    </button>
+                                </li>
+                                <li class="nav-item" role="presentation">
+                                    <button class="nav-link" id="sell-tab" data-bs-toggle="tab" data-bs-target="#sell"
+                                            type="button" role="tab" aria-controls="sell" aria-selected="false">
+                                        Verkauf
+                                    </button>
+                                </li>
+                            </ul>
+                            <div class="tab-content" id="myTabContent">
+                                <div class="tab-pane fade show active" id="buy" role="tabpanel"
+                                     aria-labelledby="buy-tab">
+                                    {{ form_start(purchaseForm) }}
                                     <div class="row mt-4">
                                         <div class="col-md-12">
-                                            {{ form_row(form.amount) }}
+                                            {{ form_row(purchaseForm.amount) }}
                                         </div>
                                     </div>
 
                                     <div class="row mt-4">
                                         <div class="col-md-12">
-                                            {{ form_row(form.price) }}
+                                            {{ form_row(purchaseForm.price) }}
                                         </div>
                                     </div>
 
                                     <div class="row mt-4">
                                         <div class="col-md-12">
-                                            {{ form_row(form.shift) }}
+                                            {{ form_row(purchaseForm.shift) }}
                                         </div>
                                     </div>
 
                                     <div class="row mt-4">
                                         <div class="col-md-12">
-                                            {{ form_row(form.product) }}
+                                            {{ form_row(purchaseForm.product) }}
                                         </div>
                                     </div>
 
                                     <div class="row mt-4">
                                         <div class="col-md-12">
-                                            {{ form_row(form.seller) }}
+                                            {{ form_row(purchaseForm.fraction) }}
                                         </div>
                                     </div>
 
                                     <div class="row mt-4">
                                         <div class="col-md-12">
-                                            {{ form_row(form.created) }}
+                                            {{ form_row(purchaseForm.created) }}
                                         </div>
                                     </div>
 
                                     <div class="row mt-4">
                                         <div class="col-md-12">
-                                            {{ form_row(form.save) }}
+                                            {{ form_row(purchaseForm.save) }}
                                         </div>
                                     </div>
 
-                                    {{ form_rest(form) }}
-                                {{ form_end(form) }}
+                                    {{ form_rest(purchaseForm) }}
+                                    {{ form_end(purchaseForm) }}
+                                </div>
+
+                                <div class="tab-pane fade" id="sell" role="tabpanel" aria-labelledby="sell-tab">
+                                    {{ form_start(saleForm) }}
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(saleForm.amount) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(saleForm.blackMoney) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(saleForm.realMoney) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(saleForm.product) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(saleForm.created) }}
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-4">
+                                        <div class="col-md-12">
+                                            {{ form_row(saleForm.save) }}
+                                        </div>
+                                    </div>
+
+                                    {{ form_rest(saleForm) }}
+                                    {{ form_end(saleForm) }}
+                                </div>
                             </div>
-
-                            <div class="tab-pane fade" id="sell" role="tabpanel" aria-labelledby="sell-tab">
-                                {{ form_start(sellForm) }}
-                                    <div class="row mt-4">
-                                        <div class="col-md-12">
-                                            {{ form_row(sellForm.amount) }}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-4">
-                                        <div class="col-md-12">
-                                            {{ form_row(sellForm.blackMoney) }}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-4">
-                                        <div class="col-md-12">
-                                            {{ form_row(sellForm.realMoney) }}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-4">
-                                        <div class="col-md-12">
-                                            {{ form_row(sellForm.product) }}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-4">
-                                        <div class="col-md-12">
-                                            {{ form_row(sellForm.created) }}
-                                        </div>
-                                    </div>
-
-                                    <div class="row mt-4">
-                                        <div class="col-md-12">
-                                            {{ form_row(sellForm.save) }}
-                                        </div>
-                                    </div>
-
-                                    {{ form_rest(sellForm) }}
-                                {{ form_end(sellForm) }}
-                            </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </div>
