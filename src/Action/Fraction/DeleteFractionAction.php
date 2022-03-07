@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Action\Fraction;
 
 use App\Action\AbstractAction;
+use App\Entity\Customer;
 use App\Entity\Fraction;
 use App\Entity\Purchase;
 use App\Notifier\DiscordNotifier;
@@ -38,6 +39,7 @@ class DeleteFractionAction extends AbstractAction
         }
 
         $this->entityManager->getRepository(Purchase::class)->setDeletedFractionToNull($fraction);
+        $this->entityManager->getRepository(Customer::class)->setDeletedFractionToNull($fraction);
 
         $this->entityManager->remove($fraction);
         $this->entityManager->flush();

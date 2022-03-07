@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Product;
 use App\Entity\Sale;
 use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -41,5 +42,18 @@ class SaleRepository extends ServiceEntityRepository
         ;
 
         return $result;
+    }
+
+    public function setDeletedProductToNull(Product $product): void
+    {
+        $this->createQueryBuilder('sale')
+            ->update()
+            ->set('sale.product', ':null')
+            ->where('sale.product = :product')
+            ->setParameter('null', null)
+            ->setParameter('product', $product)
+            ->getQuery()
+            ->execute()
+        ;
     }
 }

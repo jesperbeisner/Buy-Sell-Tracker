@@ -24,10 +24,13 @@
                             <a class="nav-link" href="{{ path('overview') }}">Übersicht</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('add') }}">Hinzufügen</a>
+                            <a class="nav-link" href="{{ path('evaluation') }}">Auswertung</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('evaluation') }}">Auswertung</a>
+                            <a class="nav-link" href="{{ path('customers') }}">Kunden</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('add') }}">Hinzufügen</a>
                         </li>
                     {% endif %}
                     {% if is_granted('ROLE_ADMIN') %}

@@ -1,0 +1,70 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container mt-3 mb-3">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1 class="page-title">Kunden</h1>
+            </div>
+        </div>
+
+        <div class="row mt-2">
+            <div class="col-lg-12">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            Hinzufügen
+                        </h5>
+
+                        {% include 'customer/partials/form.html.twig' with {'customerForm': customerForm} %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-lg-12">
+                <div class="card card-blue">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <h5 class="card-title">
+                                    Übersicht
+                                </h5>
+                            </div>
+                            <div class="col-lg-6">
+                                <input
+                                        id="customer-search"
+                                        type="text"
+                                        placeholder="Suche..."
+                                        class="form-control float-end"
+                                        style="max-width: 250px"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                {% if customers|length == 0 %}
+                                    <p class="text-center fw-bold mt-3">
+                                        Es wurde noch kein Kunde angelegt.
+                                    </p>
+                                {% else %}
+                                    {% include 'customer/partials/table.html.twig' with {'customers': customers} %}
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript_bot %}
+    {{ parent() }}
+
+    {% if customers|length > 0 %}
+        <script src="{{ asset('js/customers.js') }}"></script>
+    {% endif %}
+{% endblock %}

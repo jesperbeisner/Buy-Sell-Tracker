@@ -5,11 +5,14 @@ declare(strict_types=1);
 namespace App\Action\Product;
 
 use App\Action\AbstractAction;
+use App\Entity\Customer;
 use App\Entity\Product;
 use App\Entity\Purchase;
+use App\Entity\Sale;
 use App\Notifier\DiscordNotifier;
 use App\Result\ActionResult;
 use App\Result\Result;
+use Cassandra\Custom;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
@@ -37,7 +40,11 @@ class DeleteProductAction extends AbstractAction
             return new ActionResult(Result::FAILURE, 'Kein Produkt mit dieser ID gefunden!');
         }
 
+
+        // Bad workaround in the DeleteActions but I don't care at the moment...
         $this->entityManager->getRepository(Purchase::class)->setDeletedProductToNull($product);
+        $this->entityManager->getRepository(Sale::class)->setDeletedProductToNull($product);
+        $this->entityManager->getRepository(Customer::class)->setDeletedProductToNull($product);
 
         $this->entityManager->remove($product);
         $this->entityManager->flush();

@@ -14,7 +14,7 @@ use Exception;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Security\Core\Security;
 
-final class DeleteSaleAction extends AbstractAction
+class DeleteSaleAction extends AbstractAction
 {
     private ?int $id = null;
 
@@ -38,13 +38,14 @@ final class DeleteSaleAction extends AbstractAction
         }
 
         $product = $sale->getProduct();
+        $productName = $product === null ? '-' : $product->getName();
 
         $this->entityManager->remove($sale);
         $this->entityManager->flush();
 
         $discordNotifierMessage = "The sale was successfully deleted." . PHP_EOL . PHP_EOL;
         $discordNotifierMessage .= "Amount: {$sale->getAmount()}; Black Money: {$sale->getBlackMoney()}; ";
-        $discordNotifierMessage .= "Real Money: {$sale->getRealMoney()}; Product: {$product->getName()}; ";
+        $discordNotifierMessage .= "Real Money: {$sale->getRealMoney()}; Product: $productName; ";
         $discordNotifierMessage .= "User: {$sale->getName()}; Created: {$sale->getCreated()->format('d.m.Y - H:i:s')}";
 
         $this->discordNotifier->send(

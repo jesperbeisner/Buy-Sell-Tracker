@@ -1,0 +1,34 @@
+<div class="table-responsive">
+    <table class="table table-hover text-center mt-3" id="customers-table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Fraktion</th>
+            <th scope="col">Produkt</th>
+            <th scope="col">Kondition</th>
+            <th scope="col">Löschen</th>
+        </tr>
+        </thead>
+        {% set i = 1 %}
+        <tbody id="customers-table-body">
+        {% for customer in customers %}
+        <tr id="{{ 'customer-row-' ~ customer.id }}">
+            <th scope="row">{{ i }}</th>
+            <td class="customer-name">{{ customer.name }}</td>
+            <td>{{ customer.fraction.name ?? '-' }}</td>
+            <td>{{ customer.product.name ?? '-' }}</td>
+            <td>{{ customer.condition }}</td>
+            <td>
+                <i
+                        class="fa-solid fa-trash click-icon delete-icon text-danger"
+                        data-customer-delete-url="{{ path('delete-customer', {'id': customer.id}) }}"
+                        data-customer-row="{{ 'customer-row-' ~ customer.id }}"
+                ></i>
+            </td>
+        </tr>
+            {% set i = i + 1 %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>

@@ -30,7 +30,7 @@ class Sale
     private int $realMoney;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
-    private Product $product;
+    private ?Product $product;
 
     #[ORM\Column(type: 'datetime')]
     private DateTime $created;
@@ -96,12 +96,12 @@ class Sale
         $this->realMoney = $realMoney;
     }
 
-    public function getProduct(): Product
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setProduct(Product $product): void
+    public function setProduct(?Product $product): void
     {
         $this->product = $product;
     }

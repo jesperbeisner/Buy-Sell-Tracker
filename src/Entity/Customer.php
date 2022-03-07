@@ -23,10 +23,10 @@ class Customer
     private int $condition;
 
     #[ORM\ManyToOne(targetEntity: Product::class)]
-    private Product $product;
+    private ?Product $product;
 
     #[ORM\ManyToOne(targetEntity: Fraction::class)]
-    private Fraction $fraction;
+    private ?Fraction $fraction;
 
     #[ORM\Column(type: 'datetime')]
     private DateTime $created;
@@ -61,22 +61,22 @@ class Customer
         $this->condition = $condition;
     }
 
-    public function getProduct(): Product
+    public function getProduct(): ?Product
     {
         return $this->product;
     }
 
-    public function setProduct(Product $product): void
+    public function setProduct(?Product $product): void
     {
         $this->product = $product;
     }
 
-    public function getFraction(): Fraction
+    public function getFraction(): ?Fraction
     {
         return $this->fraction;
     }
 
-    public function setFraction(Fraction $fraction): void
+    public function setFraction(?Fraction $fraction): void
     {
         $this->fraction = $fraction;
     }
